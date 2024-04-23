@@ -1,0 +1,64 @@
+{% extends 'base.html' %} {% block content %}
+<section
+	class="login-section"
+	style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px"
+>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<!-- SignUp Form -->
+				<div class="login-form-container">
+					<h2 class="text-center" style="color: blueviolet">
+						<span style="color: #009933">SignUp</span> to PuzzleMe
+					</h2>
+					<form action="signup-process.php" method="POST">
+						<input
+							type="text"
+							name="first_name"
+							id="first_name"
+							placeholder="First Name"
+							class="login-form-input"
+							required
+						/>
+						<input
+							type="text"
+							name="last_name"
+							id="last_name"
+							placeholder="Last Name"
+							class="login-form-input"
+							required
+						/>
+						<input
+							type="email"
+							name="email"
+							id="email"
+							placeholder="Email address"
+							class="login-form-input"
+							required
+						/>
+						<input
+							type="password"
+							name="password"
+							id="password"
+							placeholder="Create Password"
+							class="login-form-input"
+							required
+						/>
+						<input
+							type="password"
+							name="confirm_password"
+							id="confirm_password"
+							placeholder="Confirm Password"
+							class="login-form-input"
+							required
+						/>
+						<button type="submit" class="login-form-button">
+							Sign Up
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}
