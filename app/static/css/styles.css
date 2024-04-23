@@ -1134,7 +1134,8 @@ iframe {
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1030;
+  z-index: 2000
+  ;
 }
 
 .visually-hidden-focusable:not(:focus):not(:focus-within) {
