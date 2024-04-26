@@ -12,26 +12,27 @@
 					<h2 class="text-center" style="color: blueviolet">
 						<span style="color: #009933">LogIn</span> to PuzzleMe
 					</h2>
-					<form action="login-process.php" method="POST">
-						<input
-							type="email"
-							name="email"
-							id="email"
-							placeholder="Email address"
-							class="login-form-input"
-							required
-						/>
-						<input
-							type="password"
-							name="password"
-							id="password"
-							placeholder="Password"
-							class="login-form-input"
-							required
-						/>
-						<button type="submit" class="login-form-button">
-							Log In
-						</button>
+					<form action="" method="post" novalidate>
+						{{ form.hidden_tag() }}
+						<p>
+							{{ form.username.label }}<br />
+							{{ form.username(size=32)}} {% for error in
+							form.username.errors %}
+							<span style="color: red">[{{ error }}]</span>
+							{% endfor %}
+						</p>
+						<p>
+							{{ form.password.label }}<br />
+							{{ form.password(size=32) }} {% for error in
+							form.password.errors %}
+							<span style="color: red">[{{ error }}]</span>
+							{% endfor %}
+						</p>
+						<p>
+							{{ form.remember_me() }} {{ form.remember_me.label
+							}}
+						</p>
+						<p>{{ form.submit() }}</p>
 					</form>
 					<p class="text-center mt-3">
 						If you do not have an account, click on the
