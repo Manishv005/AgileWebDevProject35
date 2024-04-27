@@ -35,7 +35,7 @@ class User(UserMixin, db.Model):
         return '<User {}>'.format(self.username)
     
 ''' 
-Everytime you add a class( i.e. Table ), 
+Everytime you add a class( i.e. Table ) or make changes to this file, 
 run "flask db migrate -m "{your_message_here}"
 and "flask db upgrade" 
 to generate a new database migration
