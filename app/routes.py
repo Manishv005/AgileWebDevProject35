@@ -17,9 +17,9 @@ from urllib.parse import urlsplit
 @flask_app.route('/home')
 @login_required
 def home():
-    form = LoginForm()
-    flash('Hello user')
-    return render_template('home.html',title='Home',form = form)
+    # current_user is provided by Flask-Login and represents the logged-in user
+    return render_template('home.html', title='Home', username=current_user.username)
+
 
 # View function for the about page
 @flask_app.route('/about')
@@ -33,18 +33,24 @@ def login():
         return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-
-        # authenticate the user
+        # Authenticate the user
         user = db.session.scalar(
             sa.select(User).where(User.username == form.username.data))
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+
+        # Check if user exists
+        if user is None:
+            flash('Invalid username')
             return redirect(url_for('login'))
         
-        # log the user in
+        # Check if the password is correct
+        if not user.check_password(form.password.data):
+            flash('Invalid password')
+            return redirect(url_for('login'))
+        
+        # Log the user in
         login_user(user, remember=form.remember_me.data)
 
-        # redirect to the next page
+        # Redirect to the next page
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
             next_page = url_for('home')
@@ -63,7 +69,7 @@ def signup():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash('Congratulations, you are now a registered user!','success')
         return redirect(url_for('login'))
     return render_template('signup.html', title='Sign Up', form=form)
 
