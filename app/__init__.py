@@ -10,6 +10,7 @@ flask_app.config.from_object(Config)
 db = SQLAlchemy(flask_app)
 # The database migration engine also has an instance
 migrate = Migrate(flask_app, db)
+# The login manager for the app using the flask_login package
 login = LoginManager(flask_app)
 login.login_view = 'login'
 
