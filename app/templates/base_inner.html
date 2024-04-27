@@ -77,19 +77,18 @@
 							>
 						</li>
 					</ul>
-					<button
-						class="btn rounded-pill px-3 mb-2 mb-lg-0"
-						style="
-							background-image: linear-gradient(
-								to right,
-								#7f00ff,
-								#009933
-							);
-							border: none;
-							color: white;
-						"
-						onclick="window.location.href='{{ url_for('logout') }}';"
-					>
+			
+					<!-- Welcome message and profile button -->
+					{% if current_user.is_authenticated %}
+					<button class="btn rounded-pill px-3 mb-2 mb-lg-0" style="margin-right: 10px; background: #7f00ff; border: none; color: white;">
+						<span class="d-flex align-items-center">
+							<i class="bi-person-fill me-2"></i>
+							<span class="small">Welcome, {{ current_user.username }}</span>
+						</span>
+					</button>
+					{% endif %}
+					<!-- Log Out button -->
+					<button class="btn rounded-pill px-3 mb-2 mb-lg-0" style="background-image: linear-gradient(to right, #7f00ff, #009933); border: none; color: white;" onclick="window.location.href='{{ url_for('logout') }}';">
 						<span class="d-flex align-items-center">
 							<i class="bi-door-open-fill me-2"></i>
 							<span class="small">Log Out</span>
