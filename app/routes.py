@@ -1,25 +1,74 @@
 # Monday, 22 April 2024
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for,request
 from app import flask_app
-# here we import the Flask instance object flask_app from the app package(app directory)
+from app.form import LoginForm,SignUpForm
+from flask_login import current_user,login_user,logout_user,login_required
+import sqlalchemy as sa 
+from app import db
+from app.models import User
+from urllib.parse import urlsplit
 
-# The routes for / and index using the view function index()
-# A decorator modifies the function that follows it.
+# The routes for / and home using the view function home()
+# A decorator(@flask_app) modifies the function that follows it.
 
-# View function for the index page
+
+# View function for the home page
 @flask_app.route('/')
+@flask_app.route('/home')
+@login_required
+def home():
+    form = LoginForm()
+    flash('Hello user')
+    return render_template('home.html',title='Home',form = form)
+
+# View function for the about page
 @flask_app.route('/about')
 def about():
     return render_template('about.html',title='About')
 
-
 # View function for the login page
-@flask_app.route('/login')
+@flask_app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html',title='Login')
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = LoginForm()
+    if form.validate_on_submit():
+
+        # authenticate the user
+        user = db.session.scalar(
+            sa.select(User).where(User.username == form.username.data))
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        
+        # log the user in
+        login_user(user, remember=form.remember_me.data)
+
+        # redirect to the next page
+        next_page = request.args.get('next')
+        if not next_page or urlsplit(next_page).netloc != '':
+            next_page = url_for('home')
+        return redirect(next_page)
+    return render_template('login.html', title='Log In', form=form)
 
 
 # View function for the signup page
-@flask_app.route('/signup')
+@flask_app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    return render_template('signup.html', title='SignUp')
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = SignUpForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('signup.html', title='Sign Up', form=form)
+
+# route for the logout function
+@flask_app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('about'))

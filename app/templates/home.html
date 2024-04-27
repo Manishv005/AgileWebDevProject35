@@ -1,14 +1,15 @@
-{% extends "base_inner.html" %} {% block content %}
+{% extends 'base.html' %}{% block content %}
 <header class="masthead">
 	<div class="container px-5">
-		<div class="row gx-5 align-items-center">
-			<div class="col-lg-6">
+		<div class="row gx-0 align-items-center">
+			<div class="col-lg-5">
 				<!-- Masthead text -->
-				<div class="mb-5 mb-lg-0 text-center text-lg-start">
+				<div class="mb-3 mb-lg-0 text-center text-lg-start">
 					<h1 class="display-1 lh-1 mb-3">
-						About <span style="color: blueviolet">PuzzleMe</span>.
+						Welcome to
+						<span style="color: blueviolet">PuzzleMe</span>.
 					</h1>
-					<p class="lead fw-normal text-muted mb-5">
+					<!-- <p class="lead fw-normal text-muted mb-5">
 						PuzzleMe is a dynamic online platform designed to ignite
 						the minds of puzzle enthusiasts and creators alike. At
 						the heart of PuzzleMe is the ability for users to both
@@ -17,16 +18,16 @@
 						platform encourages users to express their creativity by
 						designing unique puzzles, ranging from simple riddles to
 						complex crosswords and brain teasers.
-					</p>
+					</p> -->
 				</div>
-				<h3>
+				<!-- <h3>
 					Join <span style="color: blueviolet">PuzzleMe</span> today
 					and dive into a world of puzzles where creativity meets
 					curiosity and every challenge is a chance to learn something
 					new!
-				</h3>
+				</h3> -->
 			</div>
-			<div class="col-lg-6">
+			<div class="col-lg-5">
 				<!-- Circular Video Container -->
 				<div class="circular-video">
 					<video muted autoplay loop class="video-in-circle">
@@ -40,6 +41,4 @@
 		</div>
 	</div>
 </header>
-<!-- Footer-->
-
 {% endblock %}
