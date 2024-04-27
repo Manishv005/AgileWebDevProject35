@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% block content %}
+{% if current_user.is_anonymous %} {% extends 'base.html' %} {% else %} {%
+extends 'base_inner.html' %} {% endif %} {% block content %}
 <section
 	class="login-section"
 	style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px"

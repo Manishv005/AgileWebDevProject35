@@ -1,19 +1,13 @@
-{% extends 'base.html' %} {% block content %}
+{% if current_user.is_anonymous %} {% extends 'base.html' %} {% else %} {%
+extends 'base_inner.html' %} {% endif %} {% block content %}
 <!-- Login Page Section -->
 <section
 	class="login-section"
-	style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px"
+	style="background-color: #f8f9fa; padding-top: 200px; padding-bottom: 100px"
 >
-	<div class="container">
+	<div class="container px-5">
 		<div class="row justify-content-center">
 			<div class="col-md-6">
-				<!-- {% with messages = get_flashed_messages() %} {% if messages %}
-				<ul>
-					{% for message in messages %}
-					<li>{{message}}</li>
-					{%endfor%}
-				</ul>
-				{% endif %} {% endwith %} -->
 				<!-- Login Form -->
 				<div class="login-form-container">
 					<h2 class="text-center" style="color: blueviolet">

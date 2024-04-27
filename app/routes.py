@@ -67,8 +67,19 @@ def signup():
         return redirect(url_for('login'))
     return render_template('signup.html', title='Sign Up', form=form)
 
+# View function for the Create page
+@flask_app.route('/create')
+def create():
+    return render_template('create.html',title='Create Puzzles')
+
+# View function for the Search page
+@flask_app.route('/search')
+def search():
+    return render_template('search.html',title='Search Puzzles')
+
 # route for the logout function
 @flask_app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('about'))
+
