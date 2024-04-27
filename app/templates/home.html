@@ -1,4 +1,5 @@
-{% extends 'base.html' %}{% block content %}
+{% if current_user.is_anonymous %} {% extends 'base.html' %} {% else %} {%
+extends 'base_inner.html' %} {% endif %} {% block content %}
 <header class="masthead">
 	<div class="container px-5">
 		<div class="row gx-0 align-items-center">

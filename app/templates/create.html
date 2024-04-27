@@ -1,0 +1,29 @@
+{% if current_user.is_anonymous %} {% extends 'base.html' %} {% else %} {%
+extends 'base_inner.html' %} {% endif %} {% block content %}
+<header class="masthead">
+	<div class="container px-5">
+		<div class="row gx-5 align-items-center">
+			<div class="col-lg-6">
+				<!-- Masthead text -->
+				<div class="mb-5 mb-lg-0 text-center text-lg-start">
+					<h1 class="display-1 lh-1 mb-3">
+						This Page Creates
+						<span style="color: blueviolet">Puzzles</span>.
+					</h1>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<!-- Circular Video Container -->
+				<div class="circular-video">
+					<video muted autoplay loop class="video-in-circle">
+						<source
+							src="static/assets/img/puzzle.mp4"
+							type="video/mp4"
+						/>
+					</video>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+{% endblock %}
