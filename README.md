@@ -1,27 +1,73 @@
 # AgileWebDevProject
 
-1.  First set up the virtual environment using the command:
+## Setup Instructions
 
-```
-python -m venv venv
-```
+### For Unix-based Systems (e.g., macOS, Linux)
 
-2.  Activate the virtual environment as following:
+1. First, set up the virtual environment using the command:
 
-```
-source venv/bin/activate
-```
+    ```
+    python3 -m venv venv
+    ```
 
-3.  Install all the required packages:
+2. Activate the virtual environment:
 
-```
-pip install -r requirements.txt
-```
+    ```
+    source venv/bin/activate
+    ```
 
-4. Run the flask app:
+3. Install all the required packages:
 
-```
-flask run
-```
+    ```
+    pip install -r requirements.txt
+    ```
 
-This will provide you with a link to the app running on local host port 5000 which you can then open in the browser.
+4. Deactivate and reactivate the virtual environment to ensure proper activation:
+
+    ```
+    deactivate
+    source venv/bin/activate
+    ```
+
+5. Run the Flask app:
+
+    ```
+    flask run
+    ```
+
+    This will provide you with a link to the app running on localhost:5000, which you can then open in a web browser.
+
+### For Windows Systems
+
+1. First, set up the virtual environment using the command:
+
+    ```
+    python -m venv venv
+    ```
+
+2. Activate the virtual environment:
+
+    ```
+    venv\Scripts\activate
+    ```
+
+3. Install all the required packages:
+
+    ```
+    pip install -r requirements.txt
+    ```
+
+4. Deactivate and reactivate the virtual environment to ensure proper activation:
+
+    ```
+    deactivate
+    venv\Scripts\activate
+    ```
+
+5. Run the Flask app:
+
+    ```
+    flask run
+    ```
+
+    This will provide you with a link to the app running on localhost:5000, which you can then open in a web browser.
