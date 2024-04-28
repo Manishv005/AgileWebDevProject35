@@ -1,52 +1,56 @@
-{% if current_user.is_anonymous %} {% extends 'base.html' %} {% else %} {%
-extends 'base_inner.html' %} {% endif %} {% block content %}
-<section
-	class="login-section"
-	style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px"
->
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-md-6">
-				<!-- SignUp Form -->
-				<div class="login-form-container">
-					<h2 class="text-center" style="color: blueviolet">
-						<span style="color: #009933">SignUp</span> to PuzzleMe
-					</h2>
-					<form action="" method="post">
-						{{ form.hidden_tag() }}
-						<p>
-							{{ form.username.label }}<br />
-							{{ form.username(size=32) }}<br />
-							{% for error in form.username.errors %}
-							<span style="color: red">[{{ error }}]</span>
-							{% endfor %}
-						</p>
-						<p>
-							{{ form.email.label }}<br />
-							{{ form.email(size=64) }}<br />
-							{% for error in form.email.errors %}
-							<span style="color: red">[{{ error }}]</span>
-							{% endfor %}
-						</p>
-						<p>
-							{{ form.password.label }}<br />
-							{{ form.password(size=32) }}<br />
-							{% for error in form.password.errors %}
-							<span style="color: red">[{{ error }}]</span>
-							{% endfor %}
-						</p>
-						<p>
-							{{ form.password2.label }}<br />
-							{{ form.password2(size=32) }}<br />
-							{% for error in form.password2.errors %}
-							<span style="color: red">[{{ error }}]</span>
-							{% endfor %}
-						</p>
-						<p>{{ form.submit() }}</p>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+{% if current_user.is_anonymous %}
+{% extends 'base.html' %}
+{% else %}
+{% extends 'base_inner.html' %}
+{% endif %}
+{% block content %}
+<!-- SignUp Page Section -->
+<section class="signup-section" style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <!-- SignUp Form -->
+                <div class="login-form-container">
+                    <h2 class="text-center" style="color: blueviolet;"><span style="color: #009933;">SignUp</span> to PuzzleMe</h2>
+                    <form action="{{ url_for('signup') }}" method="post" novalidate>
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.username(class='login-form-input', size=32, placeholder='Enter Username') }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.email(class='login-form-input', size=64, placeholder='Email Address') }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.password(class='login-form-input', size=32, placeholder='Password') }}
+                        </div>
+                        <div class="form-group mb-4">
+                            {{ form.password2(class='login-form-input', size=32, placeholder='Confirm Password') }}
+                        </div>
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="login-form-button">{{ form.submit.label }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+<!-- JavaScript for Form Errors -->
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        {% for error in form.username.errors %}
+            alert("Username Error: {{ error }}");
+        {% endfor %}
+        {% for error in form.email.errors %}
+            alert("Email Error: {{ error }}");
+        {% endfor %}
+        {% for error in form.password.errors %}
+            alert("Password Error: {{ error }}");
+        {% endfor %}
+        {% for error in form.password2.errors %}
+            alert("Confirm Password Error: {{ error }}");
+        {% endfor %}
+    });
+</script>
 {% endblock %}
