@@ -13,7 +13,6 @@ from urllib.parse import urlsplit
 
 
 # View function for the home page
-@flask_app.route('/')
 @flask_app.route('/home')
 @login_required
 def home():
@@ -22,7 +21,7 @@ def home():
 
 
 # View function for the about page
-@flask_app.route('/about')
+@flask_app.route('/')
 def about():
     return render_template('about.html',title='About')
 
