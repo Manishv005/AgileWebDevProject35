@@ -1,95 +1,81 @@
-{% if current_user.is_anonymous %} {% extends 'base.html' %} {% else %} {%
-extends 'base_inner.html' %} {% endif %} {% block content %}
+{% if current_user.is_anonymous %} {% extends 'base.html' %} {% else %} {% extends 'base_inner.html' %} {% endif %} {% block content %}
 <!-- SignUp Page Section -->
-<section
-	class="signup-section"
-	style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px"
->
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-md-6">
-				<!-- SignUp Form -->
-				<div class="login-form-container">
-					<h2 class="text-center" style="color: blueviolet">
-						<span style="color: #009933">SignUp</span> to PuzzleMe
-					</h2>
-					<form
-						action="{{ url_for('signup') }}"
-						method="post"
-						novalidate
-					>
-						{{ form.hidden_tag() }}
-						<div class="form-group mt-2">
-							{{ form.username(class='login-form-input', size=32,
-							placeholder='Enter Username') }}
-							<div
-								class="form-text"
-								id="usernameError"
-								style="display: none; color: red"
-							></div>
-						</div>
-						<div class="form-group mt-2">
-							{{ form.email(class='login-form-input', size=64,
-							placeholder='Email Address') }}
-							<div
-								class="form-text"
-								id="emailError"
-								style="display: none; color: red"
-							></div>
-						</div>
-						<div class="form-group mt-2">
-							{{ form.password(class='login-form-input', size=32,
-							placeholder='Password') }}
-							<div
-								class="form-text"
-								id="passwordError"
-								style="display: none; color: red"
-							></div>
-						</div>
-						<div class="form-group mt-2">
-							{{ form.password2(class='login-form-input', size=32,
-							placeholder='Confirm Password') }}
-						</div>
-						<div
-							class="form-text mb-2"
-							id="confirmPasswordError"
-							style="display: none; color: red"
-						></div>
-						<div class="d-grid gap-2 mb-3">
-							<button type="submit" class="login-form-button">
-								{{ form.submit.label }}
-							</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+<section class="signup-section" style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <!-- SignUp Form -->
+                <div class="login-form-container">
+                    <h2 class="text-center" style="color: blueviolet">
+                        <span style="color: #009933">SignUp</span> to PuzzleMe
+                    </h2>
+                    <form action="{{ url_for('signup') }}" method="post" novalidate>
+                        {{ form.hidden_tag() }}
+                        <div class="form-group mt-2">
+                            {{ form.username(class='login-form-input', size=32, placeholder='Enter Username') }}
+                        </div>
+                        <div class="form-group mt-2">
+                            {{ form.email(class='login-form-input', size=64, placeholder='Email Address') }}
+                        </div>
+                        <div class="form-group mt-2">
+                            {{ form.password(class='login-form-input', size=32, placeholder='Password') }}
+                        </div>
+                        <div class="form-group mt-2">
+                            {{ form.password2(class='login-form-input', size=32, placeholder='Confirm Password') }}
+                        </div>
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="login-form-button">
+                                {{ form.submit.label }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- JavaScript for Form Errors -->
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">SignUp Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border: none; border-radius: 10px; padding: 5px 12px; font-size: 14px;">
+					Close
+				</button>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Showing Error Modals -->
 <script type="text/javascript">
-	document.addEventListener("DOMContentLoaded", function() {
-	    {% for error in form.username.errors %}
-	        usernameError = document.getElementById("usernameError");
-	           usernameError.innerText = "{{error}}";
-	           usernameError.style.display = "block";
-	    {% endfor %}
-	    {% for error in form.email.errors %}
-	       usernameError = document.getElementById("emailError");
-	           usernameError.innerText = "{{error}}";
-	           usernameError.style.display = "block";
-	    {% endfor %}
-	    {% for error in form.password.errors %}
-	       usernameError = document.getElementById("passwordError");
-	           usernameError.innerText = "{{error}}";
-	           usernameError.style.display = "block";
-	    {% endfor %}
-	    {% for error in form.password2.errors %}
-	       usernameError = document.getElementById("confirmPasswordError");
-	           usernameError.innerText = "{{error}}";
-	           usernameError.style.display = "block";
-	    {% endfor %}
-	});
+    document.addEventListener("DOMContentLoaded", function() {
+        var errorMessage = "";
+        {% for error in form.username.errors %}
+            errorMessage += "{{ error }}\n";
+        {% endfor %}
+        {% for error in form.email.errors %}
+            errorMessage += "{{ error }}\n";
+        {% endfor %}
+        {% for error in form.password.errors %}
+            errorMessage += "{{ error }}\n";
+        {% endfor %}
+        {% for error in form.password2.errors %}
+            errorMessage += "{{ error }}\n";
+        {% endfor %}
+        
+        if (errorMessage) {
+            document.getElementById("errorMessage").innerText = errorMessage;
+            var errorModal = new bootstrap.Modal(document.getElementById('errorModal'), {
+                keyboard: false
+            });
+            errorModal.show();
+        }
+    });
 </script>
 {% endblock %}
