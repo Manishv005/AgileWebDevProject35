@@ -86,6 +86,16 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 	        usernameError.innerText = "{{error}}";
 	        usernameError.style.display = "block";
 	 {% endfor %}
+	    {% if 'Invalid username' in get_flashed_messages() %}
+	       usernameError = document.getElementById("usernameError");
+	        usernameError.innerText = "Invalid Username";
+	        usernameError.style.display = "block";
+	       {% endif %}
+	       {% if 'Invalid password' in get_flashed_messages() %}
+	          usernameError = document.getElementById("passwordError");
+	        usernameError.innerText = "Invalid Password";
+	        usernameError.style.display = "block";
+	       {% endif %}
 	});
 </script>
 
