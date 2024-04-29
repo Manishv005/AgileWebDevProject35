@@ -22,12 +22,22 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 						<div class="form-group">
 							{{ form.username(class='login-form-input', size=32,
 							placeholder='Enter Username') }}
+							<div
+								class="form-text"
+								id="usernameError"
+								style="display: none; color: red"
+							></div>
 						</div>
-						<div class="form-group">
+						<div class="form-group mt-4">
 							{{ form.password(class='login-form-input', size=32,
 							placeholder='Enter Password') }}
+							<div
+								class="form-text"
+								id="passwordError"
+								style="display: none; color: red"
+							></div>
 						</div>
-						<div class="form-check form-check-inline mb-4">
+						<div class="form-check form-check-inline mb-4 mt-2">
 							{{ form.remember_me(class='form-check-input') }}
 							<label
 								for="{{ form.remember_me.id }}"
@@ -66,12 +76,16 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 <!-- JavaScript Alert for Form Errors-->
 <script type="text/javascript">
 	document.addEventListener("DOMContentLoaded", function() {
-	    {% if 'Invalid username' in get_flashed_messages() %}
-	        alert("Invalid Username.");
-	    {% endif %}
-	    {% if 'Invalid password' in get_flashed_messages() %}
-	        alert("Invalid Password.");
-	    {% endif %}
+	    {% for error in form.username.errors %}
+	     usernameError = document.getElementById("usernameError");
+	        usernameError.innerText = "{{error}}";
+	        usernameError.style.display = "block";
+	 {% endfor %}
+	    {% for error in form.password.errors %}
+	     usernameError = document.getElementById("passwordError");
+	        usernameError.innerText = "{{error}}";
+	        usernameError.style.display = "block";
+	 {% endfor %}
 	});
 </script>
 
