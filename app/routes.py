@@ -80,7 +80,7 @@ def create():
     if form.validate_on_submit():
         # Create a new Puzzle instance using data from the form
         new_puzzle = Puzzle(
-            username=current_user.username,  # Assuming you're storing the username in the Puzzle model
+            username=current_user.username,  
             category=form.category.data,
             number_of_letters=form.number_of_letters.data,
             word=form.word.data
