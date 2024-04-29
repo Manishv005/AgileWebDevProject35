@@ -1,59 +1,78 @@
-{% if current_user.is_anonymous %}
-{% extends 'base.html' %}
-{% else %}
-{% extends 'base_inner.html' %}
-{% endif %}
-{% block content %}
+{% if current_user.is_anonymous %} {% extends 'base.html' %} {% else %} {%
+extends 'base_inner.html' %} {% endif %} {% block content %}
 <!-- Login Page Section -->
-<section class="login-section" style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <!-- Login Form -->
-                <div class="login-form-container">
-                    <h2 class="text-center" style="color: blueviolet;"><span style="color: #009933;">LogIn</span> to PuzzleMe</h2>
-                    <form action="{{ url_for('login') }}" method="post" novalidate>
-                        {{ form.hidden_tag() }}
-                        <div class="form-group">
-                            {{ form.username(class='login-form-input', size=32, placeholder='Enter Username') }}
-                        </div>
-                        <div class="form-group">
-                            {{ form.password(class='login-form-input', size=32, placeholder='Enter Password') }}
-                        </div>
-                        <div class="form-check form-check-inline mb-4">
-                            {{ form.remember_me(class='form-check-input') }} 
-                            <label for="{{ form.remember_me.id }}" class="form-check-label" style="color: #009933;" >Remember Me</label>
-                        </div>
+<section
+	class="login-section"
+	style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px"
+>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<!-- Login Form -->
+				<div class="login-form-container">
+					<h2 class="text-center" style="color: blueviolet">
+						<span style="color: #009933">LogIn</span> to PuzzleMe
+					</h2>
+					<form
+						action="{{ url_for('login') }}"
+						method="post"
+						novalidate
+					>
+						{{ form.hidden_tag() }}
+						<div class="form-group">
+							{{ form.username(class='login-form-input', size=32,
+							placeholder='Enter Username') }}
+						</div>
+						<div class="form-group">
+							{{ form.password(class='login-form-input', size=32,
+							placeholder='Enter Password') }}
+						</div>
+						<div class="form-check form-check-inline mb-4">
+							{{ form.remember_me(class='form-check-input') }}
+							<label
+								for="{{ form.remember_me.id }}"
+								class="form-check-label"
+								style="color: #009933"
+								>Remember Me</label
+							>
+						</div>
 						<div class="d-grid gap-2 mb-3">
-                            <button type="submit" class="login-form-button">{{ form.submit.label }}</button>
-                        </div>
-                    </form>
-                    <p class="text-center mt-3">
-                        If you do not have an account, click on the
-                        <span style="color: blueviolet">Sign Up</span> button
-                        below.
-                    </p>
-                    <!-- Sign Up Button -->
-                    <div class="d-grid">
-                        <button type="button" class="login-form-button" onclick="window.location.href='{{ url_for('signup') }}';">Sign Up</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+							<button type="submit" class="login-form-button">
+								{{ form.submit.label }}
+							</button>
+						</div>
+					</form>
+					<p class="text-center mt-3">
+						If you do not have an account, click on the
+						<span style="color: blueviolet">Sign Up</span> button
+						below.
+					</p>
+					<!-- Sign Up Button -->
+					<div class="d-grid">
+						<button
+							type="button"
+							class="login-form-button"
+							onclick="window.location.href='{{ url_for('signup') }}';"
+						>
+							Sign Up
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
-
 
 <!-- JavaScript Alert for Form Errors-->
 <script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function() {
-        {% if 'Invalid username' in get_flashed_messages() %}
-            alert("Invalid Username.");
-        {% endif %}
-        {% if 'Invalid password' in get_flashed_messages() %}
-            alert("Invalid Password.");
-        {% endif %}
-    });
+	document.addEventListener("DOMContentLoaded", function() {
+	    {% if 'Invalid username' in get_flashed_messages() %}
+	        alert("Invalid Username.");
+	    {% endif %}
+	    {% if 'Invalid password' in get_flashed_messages() %}
+	        alert("Invalid Password.");
+	    {% endif %}
+	});
 </script>
 
 <!-- JavaScript Alert for Successful SignUp-->
@@ -69,5 +88,3 @@
 	});
 </script>
 {% endblock %}
-
-
