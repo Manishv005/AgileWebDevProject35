@@ -38,23 +38,23 @@ def login():
 
         # Check if user exists
         if user is None:
-            flash('Invalid username')
-            return redirect(url_for('login'))
-        
-        # Check if the password is correct
-        if not user.check_password(form.password.data):
-            flash('Invalid password')
-            return redirect(url_for('login'))
-        
-        # Log the user in
-        login_user(user, remember=form.remember_me.data)
-
-        # Redirect to the next page
-        next_page = request.args.get('next')
-        if not next_page or urlsplit(next_page).netloc != '':
-            next_page = url_for('home')
-        return redirect(next_page)
+            flash('Invalid username', 'error')
+        elif not user.check_password(form.password.data):
+            # Check if the password is correct
+            flash('Invalid password', 'error')
+        else:
+            # Log the user in
+            login_user(user, remember=form.remember_me.data)
+            
+            # Redirect to the next page
+            next_page = request.args.get('next')
+            if not next_page or urlsplit(next_page).netloc != '':
+                next_page = url_for('home')
+            return redirect(next_page)
+    
+    # If form validation fails or authentication fails, render the login template again
     return render_template('login.html', title='Log In', form=form)
+
 
 
 # View function for the signup page
