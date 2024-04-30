@@ -48,7 +48,7 @@ class Puzzle(db.Model):
 
 
 """ 
-Everytime you add a class( i.e. Table ) or make changes ot create a new table to this file, 
+Everytime you add a class( i.e. Table ) or make changes to this file, 
 run "flask db migrate -m "{your_message_here}"
 and "flask db upgrade" 
 to generate a new database migration
@@ -57,10 +57,9 @@ to generate a new database migration
 
 # Leaderboard Table Creation
 class LeaderBoard(db.Model):
-    word_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    puzzle_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     word = db.Column(db.String(128))
     username = db.Column(db.String(64))
-    missed_trials = db.Column(db.Integer)
     time_spent = db.Column(db.Integer)
     score = db.Column(db.Integer)
 
