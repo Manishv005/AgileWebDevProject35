@@ -1,9 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 import sqlalchemy as sa
 from app import db
 from app.models import User
+from flask_wtf import FlaskForm
+
+
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -30,3 +33,9 @@ class SignUpForm(FlaskForm):
             User.email == email.data))
         if user is not None:
             raise ValidationError('Please use a different email address.')
+        
+class CreatePuzzleForm(FlaskForm):
+    category = SelectField('Category', choices=[('fruits', "Fruits"), ('animals', "Animals"), ('countries', "Countries"), ('car_brands', "Car Brands")], validators=[DataRequired()])
+    number_of_letters = IntegerField('Number of Letters', validators=[DataRequired()])
+    word = StringField('Word', validators=[DataRequired()])
+    submit = SubmitField('Create Puzzle')

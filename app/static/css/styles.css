@@ -297,6 +297,39 @@ p {
   overflow: auto; /* In case content overflows */
 }
 
+.search-form {
+  text-align: center;
+  margin-top: 20px;
+}
+.search-input {
+  width: 80%; /* Larger width */
+  padding: 10px 15px; /* Padding for larger text field */
+  font-size: 16px; /* Larger font size */
+  border: 3px solid #00FF00; /* Green border */
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0 0 8px #00FF00; /* Green glow */
+  outline: none; /* Removes the outline */
+  display: block; /* Ensures it takes the full width */
+  margin: 0 auto 20px; /* Center align and margin below */
+}
+.search-input:focus {
+  box-shadow: 0 0 12px #00FF00; /* Brighter glow when focused */
+}
+.search-button {
+  display: block; /* Ensure it's a block element */
+  width: 200px; /* Width of the button */
+  padding: 10px 0; /* Padding for the button */
+  margin: 0 auto; /* Center the button below the input */
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  border: none; /* No border */
+  border-radius: 10px; /* Rounded corners */
+  font-size: 18px; /* Larger text */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+.search-button:hover {
+  background-color: #45a049; /* Slightly darker green on hover */
+}
 
 .portfolio-item img {
   transition: transform 0.3s ease;

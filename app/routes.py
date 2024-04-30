@@ -1,7 +1,7 @@
 # Monday, 22 April 2024
 from flask import render_template, flash, redirect, url_for,request
 from app import flask_app
-from app.form import LoginForm,SignUpForm
+from app.form import LoginForm,SignUpForm,CreatePuzzleForm
 from flask_login import current_user,login_user,logout_user,login_required
 import sqlalchemy as sa 
 from app import db
@@ -38,23 +38,23 @@ def login():
 
         # Check if user exists
         if user is None:
-            flash('Invalid username', 'error')
-        elif not user.check_password(form.password.data):
-            # Check if the password is correct
-            flash('Invalid password', 'error')
-        else:
-            # Log the user in
-            login_user(user, remember=form.remember_me.data)
-            
-            # Redirect to the next page
-            next_page = request.args.get('next')
-            if not next_page or urlsplit(next_page).netloc != '':
-                next_page = url_for('home')
-            return redirect(next_page)
-    
-    # If form validation fails or authentication fails, render the login template again
-    return render_template('login.html', title='Log In', form=form)
+            flash('Invalid username')
+            return redirect(url_for('login'))
+        
+        # Check if the password is correct
+        if not user.check_password(form.password.data):
+            flash('Invalid password')
+            return redirect(url_for('login'))
+        
+        # Log the user in
+        login_user(user, remember=form.remember_me.data)
 
+        # Redirect to the next page
+        next_page = request.args.get('next')
+        if not next_page or urlsplit(next_page).netloc != '':
+            next_page = url_for('home')
+        return redirect(next_page)
+    return render_template('login.html', title='Log In', form=form)
 
 
 # View function for the signup page
@@ -73,9 +73,26 @@ def signup():
     return render_template('signup.html', title='Sign Up', form=form)
 
 # View function for the Create page
-@flask_app.route('/create')
+@flask_app.route('/create', methods=['GET', 'POST'])
+@login_required
 def create():
-    return render_template('create.html',title='Create Puzzles')
+    form = CreatePuzzleForm()
+    if form.validate_on_submit():
+        # Create a new Puzzle instance using data from the form
+        new_puzzle = Puzzle(
+            username=current_user.username,  
+            category=form.category.data,
+            number_of_letters=form.number_of_letters.data,
+            word=form.word.data
+        )
+        db.session.add(new_puzzle)  # Add the new puzzle to the database session
+        db.session.commit()  # Commit the session to save the puzzle to the database
+        flash('Puzzle created successfully!', 'success')
+        return redirect(url_for('home'))  # Redirect to the home page after successful creation
+
+    # Render the create.html template with the form
+    return render_template('create.html', title='Create Puzzles', form=form)
+
 
 # View function for the Search page
 @flask_app.route('/search')
