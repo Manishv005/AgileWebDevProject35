@@ -64,20 +64,24 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {
         var errorMessage = "";
-        {% for error in form.username.errors %}
-            errorMessage += "{{ error }}\n";
-        {% endfor %}
-        {% for error in form.password.errors %}
-            errorMessage += "{{ error }}\n";
-        {% endfor %}
+        var hasFormErrors = false;  // Flag to detect form errors
+
+        // Check for form errors and set a general error message if any are found
+        {% if form.username.errors or form.password.errors %}
+            errorMessage = "Please make sure you have entered all the fields required to login.\n";
+            hasFormErrors = true;  // There are form errors
+        {% endif %}
+
+        // Check for flashed messages from the server for invalid username or password
         {% if 'Invalid username' in get_flashed_messages() %}
-            errorMessage += "Invalid Username\n";
+            errorMessage += "Please enter the correct username.\n";
         {% endif %}
         {% if 'Invalid password' in get_flashed_messages() %}
-            errorMessage += "Invalid Password\n";
+            errorMessage += "Please enter the correct password.\n";
         {% endif %}
-        
-        if (errorMessage) {
+
+        // If there are any errors, display the error modal
+        if (hasFormErrors || errorMessage !== "") {
             document.getElementById("errorMessage").innerText = errorMessage;
             var errorModal = new bootstrap.Modal(document.getElementById('errorModal'), {
                 keyboard: false
@@ -86,5 +90,4 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
         }
     });
 </script>
-
 {% endblock %}
