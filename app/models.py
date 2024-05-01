@@ -15,8 +15,8 @@ from app import login
 
 
 @login.user_loader
-def load_user(id):
-    return User.query.get(int(id))
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 # The database is represented using classes in Flask-SQLAlchemy
@@ -42,6 +42,9 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def get_id(self):
+        return str(self.user_id)
+    
     def __repr__(self):
         return f"<User {self.username}>"
 
@@ -67,6 +70,7 @@ class Puzzle(db.Model):
     creator: so.Mapped["User"] = so.relationship(back_populates="puzzles")
     has_word: so.Mapped["Word"] = so.relationship(back_populates="puzzle_word")
     puzzle_result: so.Mapped["GameResult"] = so.relationship(back_populates="has_puzzle")
+    
     def __repr__(self):
         return f"<Puzzle {self.category}>"
 
@@ -83,5 +87,5 @@ class GameResult(db.Model):
     has_puzzle: so.Mapped["Puzzle"] = so.relationship(back_populates="puzzle_result")
 
     def __repr__(self):
-        return f"<GameResult {self.word} - {self.username}>"
+        return f"<GameResult {self.word} - {self.user_id}>"
 
