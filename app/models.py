@@ -1,3 +1,9 @@
+""" 
+Everytime you add a class( i.e. Table ) or make changes to this file, 
+run "flask db migrate -m "{your_message_here}"
+and "flask db upgrade" 
+to generate a new database migration
+"""
 from datetime import datetime, timezone
 from typing import Optional
 import sqlalchemy as sa
@@ -19,13 +25,14 @@ def load_user(id):
 
 
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
 
-    puzzles = db.relationship("Puzzle", backref="creator", lazy="dynamic")
-
+    # WriteOnlyMapped defines a collection of puzzles meaning a one to many relationship
+    puzzles: so.WriteOnlyMapped["Puzzle"] = db.relationship(back_populates="creator", lazy="dynamic")
+    
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -35,29 +42,22 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
 
-
+# Puzzle table creation
 class Puzzle(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    category = db.Column(db.String(64))
-    number_of_letters = db.Column(db.Integer)
-    word = db.Column(db.String(128))
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    puzzle_id = db.Column(db.Integer, primary_key=True)
+    # word_id = db.Column(db.String(128), db.ForeignKey("Word.word_id"))
+    puzzle_creator: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.user_id))
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+
+    creator: so.Mapped["User"] = db.relationship(back_populates="puzzles", lazy="dynamic")
 
     def __repr__(self):
-        return f"<Puzzle {self.category} {self.word}>"
-
-
-""" 
-Everytime you add a class( i.e. Table ) or make changes to this file, 
-run "flask db migrate -m "{your_message_here}"
-and "flask db upgrade" 
-to generate a new database migration
-"""
+        return f"<Puzzle {self.category}>"
 
 
 # Leaderboard Table Creation
 class LeaderBoard(db.Model):
-    puzzle_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    puzzle_id = db.Column(db.Integer, primary_key=True)
     word = db.Column(db.String(128))
     username = db.Column(db.String(64))
     time_spent = db.Column(db.Integer)
@@ -65,3 +65,13 @@ class LeaderBoard(db.Model):
 
     def __repr__(self):
         return f"<LeaderBoard {self.word} - {self.username}>"
+
+# # Word Table Creation
+# class Word(db.Model):
+#     word_id = db.Column(db.Integer, primary_key=True)
+#     category = db.Column(db.String(64))
+#     word_length = db.Column(db.Integer)
+#     word = db.Column(db.String(128))
+
+#     def __repr__(self):
+#         return f"<Word {self.word}>"
