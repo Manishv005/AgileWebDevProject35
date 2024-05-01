@@ -1,2 +1,94 @@
-<!-- Test comments -->
-<!-- Test comments2 -->
+<!-- Creation of Leader board -->
+{% if current_user.is_anonymous %}
+{% extends 'base.html' %}
+{% else %}
+{% extends 'base_inner.html' %}
+{% endif %}
+
+{% block content %}
+<section class="leaderboard_class">
+    <h1 class="leaderboard_title">Top 10 Players</h1>
+    <div id="leaderboard" class="leaderboard_graph"></div>
+</section>
+<script>
+    fetch('/get_leaderboard')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const usernames = data.map(entry => entry.username);
+            const scores = data.map(entry => entry.score);
+            const maxScoreIndex = scores.indexOf(Math.max(...scores));
+
+            const trace = {
+                x: usernames,
+                y: scores,
+                type: 'bar',
+                marker: {
+                    color: 'rgba(50, 171, 96, 0.6)',  // Customize color
+                    line: {
+                        color: 'rgba(50, 171, 96, 1)',  // Customize border color
+                        width: 2
+                    },
+                    // Custom marker for the highest score bar
+                    symbol: 'bar'
+                }
+            };
+
+            // Add annotations for the highest score
+            const highestScore = Math.max(...scores);
+            const highestScoreUsername = usernames[maxScoreIndex];
+            const annotation = {
+                x: highestScoreUsername,
+                y: highestScore,
+                text: '👏', // Change text to 'Leader'
+                font: {
+                    size: 48, // Increase the font size
+                    color: 'black'
+                },
+                arrowhead: 0, // Remove arrow
+                ax: 50,
+                ay: -10,
+            };
+            trace['text'] = scores.map(score => score === highestScore ? 'Leader' : 'Runner'); // Show hand emoji only for the leader
+            trace['textposition'] = 'outside';
+            trace['hoverinfo'] = 'text';
+
+            const layout = {
+                title: {
+                    text: 'Puzzle Leaderboard',
+                    font: {
+                        size: 20,
+                        color: '#8A2BE2'
+                    }
+                },
+                xaxis: {
+                    title: {
+                        text: 'Username',
+                        font: {
+                            size: 24,
+                            color: '#8A2BE2'
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Score',
+                        font: {
+                            size: 24,
+                            color: '#8A2BE2'
+                        }
+                    }
+                },
+                annotations: [annotation]
+            };
+
+            const leaderboard = document.getElementById('leaderboard');
+            Plotly.newPlot(leaderboard, [trace], layout);
+        })
+        .catch(error => console.error('Error:', error));
+</script>
+{% endblock %}
