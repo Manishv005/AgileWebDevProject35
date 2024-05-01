@@ -1,72 +1,136 @@
-{% if current_user.is_anonymous %} 
-    {% extends 'base.html' %} 
-{% else %} 
-    {% extends 'base_inner.html' %} 
-{% endif %} 
-{% block content %}
+{% if current_user.is_anonymous %} {% extends 'base.html' %} {% else %} {%
+extends 'base_inner.html' %} {% endif %} {% block content %}
 <header class="masthead">
-    <div class="container px-5">
-        <div class="row gx-5 align-items-center">
-            <div class="col-lg-6">
-                <!-- Masthead text -->
-                <div class="mb-5 mb-lg-0 text-center text-lg-start">
-                    <h1 class="display-1 lh-1 mb-3">
-                        Create
-                        <span style="color: blueviolet">Puzzles</span> that you what other's to <span style="color: blueviolet">PLAY</span>.
-                    </h1>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <!-- Circular Video Container -->
-                <div class="circular-video">
-                    <video muted autoplay loop class="video-in-circle">
-                        <source src="static/assets/img/puzzle.mp4" type="video/mp4"/>
-                    </video>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container px-5">
+		<div class="row gx-5 align-items-center">
+			<div class="col-lg-6">
+				<!-- Masthead text -->
+				<div class="mb-5 mb-lg-0 text-center text-lg-start">
+					<h1 class="display-1 lh-1 mb-3">
+						Create
+						<span style="color: blueviolet">Puzzles</span> that you
+						what other's to
+						<span style="color: blueviolet">PLAY</span>.
+					</h1>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<!-- Circular Video Container -->
+				<div class="circular-video">
+					<video muted autoplay loop class="video-in-circle">
+						<source
+							src="static/assets/img/puzzle.mp4"
+							type="video/mp4"
+						/>
+					</video>
+				</div>
+			</div>
+		</div>
+	</div>
 </header>
 <aside class="text-center bg-gradient-primary-to-secondary">
-    <div class="container px-5">
-        <div class="row gx-5 justify-content-center">
-            <div class="col-xl-8">
-                <div class="h2 fs-1 text-white mb-4">"Create a Puzzle to Get Your Friends Puzzled."</div>
-                <!-- Puzzle Creation Form -->
-                <div class="login-form-container">
-                    <form action="{{ url_for('create') }}" method="POST" id="puzzleForm">
-                        <!-- Hidden Field for Username -->
-                        <input type="hidden" name="username" value="{{ current_user.username }}">
+	<div class="container px-5">
+		<div class="row gx-5 justify-content-center">
+			<div class="col-xl-8">
+				<div class="h2 fs-1 text-white mb-4">
+					"Create a Puzzle to Get Your Friends Puzzled."
+				</div>
+				<!-- Puzzle Creation Form -->
+				<div class="login-form-container">
+					<form
+						action="{{ url_for('create') }}"
+						method="POST"
+						id="puzzleForm"
+						style="display: none"
+					>
+						<!-- Hidden Field for Username -->
+						<input
+							type="hidden"
+							name="username"
+							value="{{ current_user.username }}"
+						/>
 
-                        <!-- Category Selection Dropdown -->
-                        <div class="form-group mb-3">
-                            <h4 style="color:blueviolet;">
-                                SELECT THE CATEGORY OF THE WORD THAT YOU WANT TO CREATE.
-                            </h4>
-                            <select name="category" id="category" class="login-form-input" required>
-                                <option value="" disabled selected>Select your category</option>
-                                <option value="fruits">FRUIT's</option>
-                                <option value="animals">ANIMAL's</option>
-                                <option value="countries">COUNTRIES</option>
-                                <option value="car_brands">CAR BRAND's</option>
-                            </select>
-                        </div>
-                        <!-- Number of Letters Input -->
-                        <h4 style="color:blueviolet;">
-                            ENTER THE NUMBER OF LETTERS THAT THE WORD WOULD HAVE.
-                        </h4>
-                        <input type="number" name="number_of_letters" id="number_of_letters" placeholder="Number Of Letters" class="login-form-input" max="15" required>
-                        <!-- Word Input -->
-                        <h4 style="color:blueviolet;">
-                            ENTER THE WORD THAT YOU WANT THE OTHER USERS TO GUESS.
-                        </h4>
-                        <input type="text" name="word" id="word" placeholder="Enter The WORD" class="login-form-input" required>
-                        <!-- Submit Button -->
-                        <button type="submit" class="login-form-button">CREATE PUZZLE</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+						<!-- Category Selection Dropdown -->
+						<div class="form-group mb-3">
+							<h4 style="color: blueviolet">
+								SELECT THE CATEGORY OF THE WORD THAT YOU WANT TO
+								CREATE.
+							</h4>
+							<select
+								name="category"
+								id="category"
+								class="login-form-input"
+								required
+							>
+								<option value="" disabled selected>
+									Select your category
+								</option>
+								<option value="fruits">FRUITS</option>
+								<option value="animals">ANIMALS</option>
+								<option value="countries">COUNTRIES</option>
+								<option value="car_brands">CAR BRANDS</option>
+							</select>
+						</div>
+						<!-- Number of Letters Input -->
+						<h4 style="color: blueviolet">
+							ENTER THE NUMBER OF LETTERS THAT THE WORD WOULD
+							HAVE.
+						</h4>
+						<input
+							type="number"
+							name="number_of_letters"
+							id="number_of_letters"
+							placeholder="Number Of Letters"
+							class="login-form-input"
+							max="15"
+							required
+						/>
+						<!-- Word Input -->
+						<h4 style="color: blueviolet">
+							ENTER THE WORD THAT YOU WANT THE OTHER USERS TO
+							GUESS.
+						</h4>
+						<input
+							type="text"
+							name="word"
+							id="word"
+							placeholder="Enter The WORD"
+							class="login-form-input"
+							required
+						/>
+						<!-- Submit Button -->
+						<button type="submit" class="login-form-button">
+							CREATE PUZZLE
+						</button>
+					</form>
+					<form
+						action="{{ url_for('create') }}"
+						method="post"
+						novalidate
+					>
+						{{ form.hidden_tag() }}
+						<div class="form-group">
+							{{ form.category(class='login-form-input', size=32,
+							placeholder='Category') }}
+						</div>
+						<div class="form-group mt-4">
+							{{ form.number_of_letters(class='login-form-input',
+							size=32, placeholder='No. of Letters') }}
+						</div>
+						<div class="form-group mt-4">
+							{{ form.word(class='login-form-input', size=32,
+							placeholder='word') }}
+						</div>
+
+						<div class="d-grid gap-2 mb-3">
+							<button type="submit" class="login-form-button">
+								{{ form.submit.label }}
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </aside>
 {% endblock %}
