@@ -133,7 +133,7 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 
 	    // Error handling for all empty fields
 	    {% if form.username.errors and form.password.errors and form.email.errors and form.password2.errors %}
-	        errorMessage = "Make sure you have entered all the fields required to login.\n\n";
+	        errorMessage = "Make sure you have entered all the fields required to SignUp onto our platform.\n\n";
 	        hasFormErrors = true;  // There are form errors
 	    {% endif %}
 
