@@ -25,6 +25,8 @@ class SignUpForm(FlaskForm):
     def validate_username(self, username):
         user = db.session.scalar(sa.select(User).where(
             User.username == username.data))
+        if ' ' in username.data:
+            raise ValidationError('Username cannot contain spaces.')
         if user is not None:
             raise ValidationError('Please use a different username.')
 
@@ -33,6 +35,10 @@ class SignUpForm(FlaskForm):
             User.email == email.data))
         if user is not None:
             raise ValidationError('Please use a different email address.')
+    def validate_password(self, password):
+        if ' ' in password.data:
+            raise ValidationError('Password cannot contain spaces.')
+
         
 class CreatePuzzleForm(FlaskForm):
     category = SelectField('Category', choices=[('fruits', "Fruits"), ('animals', "Animals"), ('countries', "Countries"), ('car_brands', "Car Brands")], validators=[DataRequired()])
