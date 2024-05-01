@@ -123,5 +123,5 @@ def leaderboard():
 @flask_app.route("/get_leaderboard")
 def get_leaderboard():
     leaderTable = GameResult.query.all()
-    data = [{"username": entry.username, "score": entry.score} for entry in leaderTable]
+    data = [{"username": entry.user_id, "score": entry.score} for entry in leaderTable]
     return jsonify(data)

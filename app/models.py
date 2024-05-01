@@ -26,7 +26,7 @@ def load_user(id):
 
 class User(UserMixin, db.Model):
     # Define the attributes
-    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
@@ -61,7 +61,7 @@ class Puzzle(db.Model):
     puzzle_id = db.Column(db.Integer, primary_key=True)
     word_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Word.word_id),
                                                index=True)
-    puzzle_creator: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),index=True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.user_id),index=True)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     creator: so.Mapped["User"] = so.relationship(back_populates="puzzles")
@@ -75,7 +75,7 @@ class Puzzle(db.Model):
 class GameResult(db.Model):
     result_id = db.Column(db.Integer, primary_key=True)
     puzzle_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Puzzle.puzzle_id),index=True)
-    puzzle_solver: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),index=True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.user_id),index=True)
     time_spent = db.Column(db.Integer)
     score = db.Column(db.Integer)
 
