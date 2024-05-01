@@ -5,7 +5,7 @@ from app.form import LoginForm, SignUpForm, CreatePuzzleForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app import db
-from app.models import User, LeaderBoard
+from app.models import User, GameResult
 from urllib.parse import urlsplit
 
 # The routes for / and home using the view function home()
@@ -122,6 +122,6 @@ def leaderboard():
 
 @flask_app.route("/get_leaderboard")
 def get_leaderboard():
-    leaderTable = LeaderBoard.query.all()
+    leaderTable = GameResult.query.all()
     data = [{"username": entry.username, "score": entry.score} for entry in leaderTable]
     return jsonify(data)
