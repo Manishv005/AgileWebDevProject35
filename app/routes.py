@@ -81,28 +81,59 @@ def signup():
 def create():
     form = CreatePuzzleForm()
     if form.validate_on_submit():
+        # Retrieve the word from the form data
+        selected_word = form.word.data
+
         # Create a new Word using data from the form
         new_word = Word(
             category=form.category.data,
-            word=form.word.data,
-            word_length = form.number_of_letters.data
+            word=selected_word,
+            word_length=len(selected_word)  # Calculate word length dynamically
         )
         db.session.add(new_word)
         db.session.commit()
+
         # Create a new Puzzle instance using data from the form
         new_puzzle = Puzzle(
             user_id=current_user.user_id,
-            word_id=1,
+            word_id=new_word.id # Use the id of the newly created word
         )
-        db.session.add(new_puzzle)  # Add the new puzzle to the database session
+        db.session.add(new_puzzle)
         db.session.commit()  # Commit the session to save the puzzle to the database
-        flash("Puzzle created successfully!, success")
-        return redirect(
-            url_for("home")
-        )  # Redirect to the home page after successful creation
+        flash("Puzzle created successfully!", "success")
+        return redirect(url_for("home"))  # Redirect to the home page after successful creation
 
     # Render the create.html template with the form
     return render_template("create.html", title="Create Puzzles", form=form)
+
+# Word Creation and AJAX to fetch the word based on category selected.
+@flask_app.route('/get_words/')
+def get_words():
+    category = request.args.get('category', '', type=str)
+    words_dict = {
+        'fruits': [
+            "Apple", "Blueberry", "Mandarin", "Pineapple", "Pomegranate",
+            "Watermelon", "Kiwi", "Guava", "Mango", "Apricot", "Cherry"
+        ],
+        'animals': [
+            "Hedgehog", "Rhinoceros", "Squirrel", "Panther", "Walrus",
+            "Zebra", "Elephant", "Giraffe", "Kangaroo", "Lion", "Tiger"
+        ],
+        'countries': [
+            "India", "Hungary", "Kyrgyzstan", "Switzerland", "Zimbabwe",
+            "Dominica", "Nepal", "Australia", "Morocco", "Portugal", "Brazil"
+        ],
+        'car_brands': [
+            "Toyota", "Honda", "Ford", "Chevrolet", "Tesla",
+            "Nissan", "BMW", "Mercedes", "Audi", "Volkswagen", "Porsche"
+        ],
+        'colors': [
+            "Red", "Blue", "Green", "Yellow", "Orange",
+            "Purple", "Black", "White", "Pink", "Gray", "Cyan"
+        ]
+    }
+    words = words_dict.get(category, [])
+    return jsonify(words)
 
 
 # View function for the Search page
