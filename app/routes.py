@@ -5,7 +5,7 @@ from app.form import LoginForm, SignUpForm, CreatePuzzleForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app import db
-from app.models import User, LeaderBoard
+from app.models import User, GameResult, Word, Puzzle
 from urllib.parse import urlsplit
 
 # The routes for / and home using the view function home()
@@ -81,16 +81,22 @@ def signup():
 def create():
     form = CreatePuzzleForm()
     if form.validate_on_submit():
+        # Create a new Word using data from the form
+        new_word = Word(
+            category=form.category.data,
+            word=form.word.data,
+            word_length = form.number_of_letters.data
+        )
+        db.session.add(new_word)
+        db.session.commit()
         # Create a new Puzzle instance using data from the form
         new_puzzle = Puzzle(
-            username=current_user.username,
-            category=form.category.data,
-            number_of_letters=form.number_of_letters.data,
-            word=form.word.data,
+            user_id=current_user.user_id,
+            word_id=1,
         )
         db.session.add(new_puzzle)  # Add the new puzzle to the database session
         db.session.commit()  # Commit the session to save the puzzle to the database
-        flash("Puzzle created successfully!", "success")
+        flash("Puzzle created successfully!, success")
         return redirect(
             url_for("home")
         )  # Redirect to the home page after successful creation
@@ -122,6 +128,6 @@ def leaderboard():
 
 @flask_app.route("/get_leaderboard")
 def get_leaderboard():
-    leaderTable = LeaderBoard.query.all()
-    data = [{"username": entry.username, "score": entry.score} for entry in leaderTable]
+    leaderTable = GameResult.query.all()
+    data = [{"username": entry.user_id, "score": entry.score} for entry in leaderTable]
     return jsonify(data)
