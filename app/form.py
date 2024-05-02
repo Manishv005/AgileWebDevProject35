@@ -41,7 +41,13 @@ class SignUpForm(FlaskForm):
 
         
 class CreatePuzzleForm(FlaskForm):
-    category = SelectField('Category', choices=[('fruits', "Fruits"), ('animals', "Animals"), ('countries', "Countries"), ('car_brands', "Car Brands")], validators=[DataRequired()])
-    number_of_letters = IntegerField('Number of Letters', validators=[DataRequired()])
-    word = StringField('Word', validators=[DataRequired()])
+    category = SelectField('Category', choices=[
+        ('', 'Select a Category'),
+        ('fruits', 'Fruits'),
+        ('animals', 'Animals'),
+        ('countries', 'Countries'),
+        ('car_brands', 'Car Brands'),
+        ('colors', 'Colors')
+    ], validators=[DataRequired()])
+    word = SelectField('Word', choices=[('', 'Select a Word')], validators=[DataRequired()])
     submit = SubmitField('Create Puzzle')
