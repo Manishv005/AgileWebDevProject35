@@ -49,5 +49,5 @@ class CreatePuzzleForm(FlaskForm):
         ('car_brands', 'Car Brands'),
         ('colors', 'Colors')
     ], validators=[DataRequired()])
-    word = SelectField('Word', choices=[('', 'Select a Word')], validators=[DataRequired()])
+    word = SelectField('word', choices=[('', 'Select a Word')], validators=[DataRequired()])
     submit = SubmitField('Create Puzzle')
