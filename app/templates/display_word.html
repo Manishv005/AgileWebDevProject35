@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Category: {{ category }}</h1>
+        <div id="category-container">WORD CATEGORY : {{ category }}</div>
         <div id="user-input-section">
             <!-- Dashes are generated dynamically by JavaScript -->
         </div>
@@ -41,12 +41,16 @@
             const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             letterContainer.innerHTML = '';
             letters.split('').forEach(letter => {
-                const button = document.createElement('button');
-                button.textContent = letter;
-                button.onclick = () => handleGuess(letter);
-                button.classList.add('letters');
-                letterContainer.appendChild(button);
-            });
+            const button = document.createElement('button');
+            button.textContent = letter;
+            button.onclick = function() { 
+            handleGuess(letter);
+            this.disabled = true;  // Disable the button
+            this.classList.add('active'); 
+            };
+            button.classList.add('letters');
+            letterContainer.appendChild(button);
+        });
 
             drawHangmanFrame();
         }
