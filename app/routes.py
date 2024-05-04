@@ -93,13 +93,15 @@ def create():
         db.session.add(new_word)
         db.session.commit()
 
-        # # Create a new Puzzle instance using data from the form
-        # new_puzzle = Puzzle(
-        #     user_id=current_user.user_id,
-        #     word_id=new_word.id # Use the id of the newly created word
-        # )
-        # db.session.add(new_puzzle)
-        # db.session.commit()  # Commit the session to save the puzzle to the database
+
+        # Create a new Puzzle instance using data from the form
+        new_puzzle = Puzzle(
+             user_id=current_user.user_id,
+             word_id=new_word.word_id # Use the id of the newly created word
+         )
+        db.session.add(new_puzzle)
+        db.session.commit()  # Commit the session to save the puzzle to the database
+        
         flash("Puzzle created successfully!", "success")
         return redirect(url_for("home"))  # Redirect to the home page after successful creation
 
@@ -137,9 +139,34 @@ def get_words():
 
 
 # View function for the Search page
-@flask_app.route("/search")
+@flask_app.route('/search', methods=['GET', 'POST'])
 def search():
-    return render_template("search.html", title="Search Puzzles")
+    if request.method == 'POST':
+        username = request.form['username']
+        user = User.query.filter_by(username=username).first()
+
+        if not user:
+            flash("No such user found.", "error")
+            # Display the search page again with an error message
+            return render_template('search.html')
+
+        # Find the latest puzzle associated with this user
+        puzzle = Puzzle.query.filter_by(user_id=user.user_id).order_by(Puzzle.date_created.desc()).first()
+
+        if not puzzle:
+            flash("No puzzles found for this user.", "error")
+            return render_template('search.html')
+
+        word = Word.query.get(puzzle.word_id)
+        if not word:
+            flash("No word found for the latest puzzle.", "error")
+            return render_template('search.html')
+
+        # Redirect to a new page that displays the category and blanks for the word length
+        return render_template('display_word.html', category=word.category, word_length=word.word_length,word=word.word)
+    else:
+        # Handle GET request to show an empty search form
+        return render_template('search.html')
 
 
 # route for the logout function
@@ -150,8 +177,6 @@ def logout():
 
 
 # LeaderBoard changes
-
-
 @flask_app.route("/leaderboard")
 def leaderboard():
     return render_template("leaderboard.html", title="Leaderboard")
