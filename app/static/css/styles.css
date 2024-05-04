@@ -1728,3 +1728,20 @@ section {
   width: 80%;
   margin: 0 auto;
 }
+
+/* Define CSS animation for hover effect */
+.hovered-bar {
+  animation: zoomOut 0.3s forwards;
+  fill: blueviolet !important;
+  /* Change fill color of the bar */
+}
+
+@keyframes zoomOut {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.1);
+  }
+}
