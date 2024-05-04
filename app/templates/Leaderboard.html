@@ -1,4 +1,3 @@
-<!-- Creation of Leader board -->
 {% if current_user.is_anonymous %}
 {% extends 'base.html' %}
 {% else %}
@@ -23,19 +22,22 @@
             const scores = data.map(entry => entry.score);
             const maxScoreIndex = scores.indexOf(Math.max(...scores));
 
+            const colors = ['blue', 'green', 'red', 'black', 'brown']; // Define array of colors
+
             const trace = {
                 x: usernames,
                 y: scores,
                 type: 'bar',
                 marker: {
-                    color: 'rgba(50, 171, 96, 0.6)',  // Customize color
+                    color: 'rgba(50, 171, 96, 0.6)', // Customize color
                     line: {
-                        color: 'rgba(50, 171, 96, 1)',  // Customize border color
+                        color: 'rgba(50, 171, 96, 1)', // Customize border color
                         width: 2
                     },
                     // Custom marker for the highest score bar
                     symbol: 'bar'
-                }
+                },
+                hoverinfo: 'none', // Hide default hover info
             };
 
             // Add annotations for the highest score
@@ -55,14 +57,13 @@
             };
             trace['text'] = scores.map(score => score === highestScore ? 'Leader' : 'Runner'); // Show hand emoji only for the leader
             trace['textposition'] = 'outside';
-            trace['hoverinfo'] = 'text';
 
             const layout = {
                 title: {
                     text: 'Puzzle Leaderboard',
                     font: {
                         size: 20,
-                        color: '#8A2BE2'
+                        color: '#0000FF'
                     }
                 },
                 xaxis: {
@@ -83,12 +84,33 @@
                         }
                     }
                 },
-                annotations: [annotation]
+                annotations: [annotation],
+                paper_bgcolor: '#40E0D0', // Change the background color of the graph to light blue
+                hovermode: 'closest', // Show hover info for the closest point
             };
 
             const leaderboard = document.getElementById('leaderboard');
             Plotly.newPlot(leaderboard, [trace], layout);
+
+            // Add event listener for bar hover
+            leaderboard.on('plotly_hover', function (data) {
+                const bars = document.querySelectorAll('.bars path');
+                bars.forEach((bar, index) => {
+                    if (index === data.points[0].pointNumber) {
+                        bar.classList.add('hovered-bar');
+                    } else {
+                        bar.classList.remove('hovered-bar');
+                    }
+                });
+            });
+
+            // Assigning colors to bars
+            const bars = document.querySelectorAll('.bars path');
+            bars.forEach((bar, index) => {
+                bar.style.fill = colors[index % colors.length];
+            });
         })
         .catch(error => console.error('Error:', error));
+
 </script>
 {% endblock %}
