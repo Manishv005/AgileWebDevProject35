@@ -93,6 +93,7 @@ def create():
         db.session.add(new_word)
         db.session.commit()
 
+
         # Create a new Puzzle instance using data from the form
         new_puzzle = Puzzle(
              user_id=current_user.user_id,
@@ -100,6 +101,7 @@ def create():
          )
         db.session.add(new_puzzle)
         db.session.commit()  # Commit the session to save the puzzle to the database
+        
         flash("Puzzle created successfully!", "success")
         return redirect(url_for("home"))  # Redirect to the home page after successful creation
 
