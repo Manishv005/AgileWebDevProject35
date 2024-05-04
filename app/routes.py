@@ -161,7 +161,7 @@ def search():
             return render_template('search.html')
 
         # Redirect to a new page that displays the category and blanks for the word length
-        return render_template('display_word.html', category=word.category, word_length=word.word_length)
+        return render_template('display_word.html', category=word.category, word_length=word.word_length,word=word.word)
     else:
         # Handle GET request to show an empty search form
         return render_template('search.html')
