@@ -137,36 +137,61 @@ def get_words():
     words = words_dict.get(category, [])
     return jsonify(words)
 
-
 # View function for the Search page
 @flask_app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
         username = request.form['username']
         user = User.query.filter_by(username=username).first()
-
-        if not user:
+        
+        if user is None:
             flash("No such user found.", "error")
             # Display the search page again with an error message
             return render_template('search.html')
 
         # Find the latest puzzle associated with this user
-        puzzle = Puzzle.query.filter_by(user_id=user.user_id).order_by(Puzzle.date_created.desc()).first()
+        puz_list = Puzzle.query.filter_by(user_id=user.user_id).order_by(Puzzle.date_created.desc()).limit(6).all() # Return List
 
-        if not puzzle:
+        if not puz_list:
             flash("No puzzles found for this user.", "error")
             return render_template('search.html')
-
-        word = Word.query.get(puzzle.word_id)
+        
+        puzzle_list = []
+        for puzzle in puz_list:
+            word = Word.query.get(puzzle.word_id)
+            if not word:
+                flash("No word found for the latest puzzle.", "error")
+                return render_template('search.html')
+            puzzle_list.append({"puzzle_id":puzzle.puzzle_id,"category":word.category, "word_length":word.word_length,"word":word.word})
+        '''
         if not word:
             flash("No word found for the latest puzzle.", "error")
             return render_template('search.html')
 
         # Redirect to a new page that displays the category and blanks for the word length
         return render_template('display_word.html', category=word.category, word_length=word.word_length,word=word.word)
+        '''
+    
+        return render_template('search.html',username=username, puzzle_list=puzzle_list)
+        
     else:
         # Handle GET request to show an empty search form
         return render_template('search.html')
+
+# View function for the Search page
+@flask_app.route('/display_word/<username>/<puzzle_id>')
+def display_word(username,puzzle_id):
+    if current_user.is_authenticated:
+        puzzle = Puzzle.query.get(puzzle_id)
+        if puzzle:
+            word = Word.query.get(puzzle.word_id)
+            return render_template('display_word.html', category=word.category, word_length=word.word_length,word=word.word)
+        else:
+            return render_template('search.html')
+    else:
+        return redirect(url_for("about"))
+
+
 
 
 # route for the logout function
