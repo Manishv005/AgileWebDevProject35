@@ -10,6 +10,9 @@
 </head>
 <body>
     <div class="container">
+
+        <button class="back_button" id="backButton">Back</button>
+        <div id="counter"  style="display: inline-block;">0:00</div>
         <h1>Category: {{ category }}</h1>
         <div id="user-input-section">
             <!-- Dashes are generated dynamically by JavaScript -->
@@ -20,7 +23,7 @@
     </div>
 
     <script>
-        const wordLength = {{ word_length }};
+        const wordLength = "{{ word_length }}";
         const word = "{{ word | upper }}";
         const userInputSection = document.getElementById('user-input-section');
         const letterContainer = document.getElementById('letter-container');
@@ -130,9 +133,11 @@
             if (allRevealed) {
                 resultText.textContent = 'Congratulations! You guessed the word!';
                 disableLetters();
+                stopTimer();
             } else if (wrongGuesses >= 6) {
                 resultText.textContent = `Sorry! You failed to guess the word: ${word}`;
                 disableLetters();
+                stopTimer();
             }
         }
 
@@ -141,6 +146,56 @@
         }
 
         window.onload = initializeGame;
+
+        // Back Button code
+
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+            var backButton = document.getElementById('backButton');
+            if (backButton) 
+            {
+                backButton.addEventListener('click', function() 
+                {
+                window.history.back(); // Navigate to the previous page
+                });
+            }
+        });
+
+        // Timer Code
+
+        // Function to format time in mm:ss format
+        function formatTime(seconds) 
+        {
+            var minutes = Math.floor(seconds / 60);
+            var remainderSeconds = seconds % 60;
+            return minutes + ':' + (remainderSeconds < 10 ? '0' : '') + remainderSeconds;
+        }
+
+        // Function to update the counter every second
+        function updateCounter() 
+        {
+            var counterElement = document.getElementById('counter');
+            var seconds = 0;
+
+            intervalId = setInterval(function() 
+            {
+                seconds++;
+                counterElement.textContent = formatTime(seconds);
+            }, 1000);
+        }
+
+        // Stop the counter when game is finished.
+        function stopTimer() 
+        {
+            clearInterval(intervalId);
+        }
+
+
+        // Start the counter when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+            updateCounter();
+        });
     </script>
 </body>
 </html>
