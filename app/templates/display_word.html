@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <!-- Link to the custom CSS file for the Hangman game -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_hangman.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -24,6 +25,8 @@
     <script>
         const wordLength = "{{ word_length }}";
         const word = "{{ word | upper }}";
+        var seconds = 0;
+        const puzzle_id = "{{puzzle_id}}"
         const userInputSection = document.getElementById('user-input-section');
         const letterContainer = document.getElementById('letter-container');
         const resultText = document.getElementById('result-text');
@@ -137,6 +140,7 @@
                 resultText.textContent = 'Congratulations! You guessed the word!';
                 disableLetters();
                 stopTimer();
+                handleSuccessfulGuess(seconds)
             } else if (wrongGuesses >= 6) {
                 resultText.textContent = `Sorry! You failed to guess the word: ${word}`;
                 disableLetters();
@@ -178,7 +182,6 @@
         function updateCounter() 
         {
             var counterElement = document.getElementById('counter');
-            var seconds = 0;
 
             intervalId = setInterval(function() 
             {
@@ -199,6 +202,35 @@
         {
             updateCounter();
         });
+
+        // Function to send data to the Flask server
+        function sendDataToServer(time_taken) 
+        {
+            const data = {
+                    puzzle_id: puzzle_id,
+                    time_taken: time_taken
+                }
+                
+            $.ajax({
+                url: '/game_result',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) 
+                {
+                    console.log('Data sent to server successfully:', response);
+                },
+                error: function(xhr, status, error) 
+                {
+                    console.error('Error sending data to server:', error);
+                }
+            });
+        }
+        // Function to handle successful guess
+        function handleSuccessfulGuess(time_taken) 
+        {
+            sendDataToServer(time_taken);
+        }
     </script>
 </body>
 </html>
