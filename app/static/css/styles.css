@@ -516,7 +516,7 @@ p {
   /* Adjust size as needed */
 }
 
-/* Additional styling for button groups if necessary */
+
 .button-group {
   display: flex;
   justify-content: center;
@@ -591,6 +591,30 @@ button:hover {
   /* Adjust size as needed */
   margin-bottom: 15px;
   /* Space between icon and text */
+}
+
+.card {
+  border: 2px solid #9900ff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  background-color: #ffffff;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(0, 153, 0, 1.5);
+}
+
+.card-header {
+  color: black;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.card-title {
+  color: #9900ff;
 }
 
 ul {
