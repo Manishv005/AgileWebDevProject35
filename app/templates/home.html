@@ -16,10 +16,7 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 				<!-- Circular Video Container -->
 				<div class="circular-video">
 					<video muted autoplay loop class="video-in-circle">
-						<source
-							src="static/assets/img/puzzle.mp4"
-							type="video/mp4"
-						/>
+						<source src="static/assets/img/puzzle.mp4" type="video/mp4" />
 					</video>
 				</div>
 			</div>
@@ -27,24 +24,36 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 	</div>
 </header>
 <aside class="text-center bg-gradient-primary-to-secondary">
-    <div class="container px-5">
-        <div class="row gx-5 justify-content-center">
-            <div class="col-xl-8">
-                <div class="h2 fs-1 text-white mb-4">"Rule's to play this game are."</div>
-                <!-- Puzzle Rules Container -->
-                <div class="login-form-container">
+	<div class="container px-5">
+		<div class="row gx-5 justify-content-center">
+			<div class="col-xl-8">
+				<div class="h2 fs-1 text-white mb-4">"Rule's to play this game are."</div>
+				<!-- Puzzle Rules Container -->
+				<div class="login-form-container" style="text-align: left;">
 					<h4 style="color:blueviolet;">
-						Rule 1: 
+						Rule 1: Guess the word by selecting letters one at a time.
 					</h4>
 					<h4 style="color:blueviolet;">
-						Rule 2: 
+						Rule 2: Each correctly guessed letter will replace a corresponding dash(-) in the word.
 					</h4>
 					<h4 style="color:blueviolet;">
-						Rule 3: 
+						Rule 3: Each incorrect guess will contribute to the drawing of the hangman.
 					</h4>
-                </div>
-            </div>
-        </div>
-    </div>
+					<h4 style="color:blueviolet;">
+						Rule 4: The game ends in success if you correctly guess all letters of the word before the
+						hangman is fully drawn.
+					</h4>
+					<h4 style="color:blueviolet;">
+						Rule 5: The game ends in failure if the hangman is fully drawn before the word is guessed.
+					</h4>
+					<h4 style="color:blueviolet;">
+						Rule 6: The timer starts at the beginning of each game and stops when the game ends. The time
+						taken affects your score and ranking on the leaderboard.
+					</h4>
+				</div>
+
+			</div>
+		</div>
+	</div>
 </aside>
 {% endblock %}
