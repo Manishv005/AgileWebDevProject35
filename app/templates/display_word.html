@@ -10,18 +10,15 @@
 </head>
 <body>
     <div class="container">
-
-        <button class="back_button" id="backButton">Back</button>
-        <div id="counter"  style="display: inline-block;">0:00</div>
-        <h1>Category: {{ category }}</h1>
-  
-        <div id="category-container">WORD CATEGORY : {{ category }}</div>
-        <div id="user-input-section">
-            <!-- Dashes are generated dynamically by JavaScript -->
+        <div class="timer" id="counter">0:00</div>
+        <div id="category-container" class="centered-content">
+            WORD CATEGORY : {{ category }}
         </div>
+        <div id="user-input-section"></div>
         <div id="letter-container" class="letter-container"></div>
         <canvas id="canvas" width="300" height="300"></canvas>
         <div id="result-text"></div>
+        <button class="back_button" id="backButton">Back</button>
     </div>
 
     <script>
