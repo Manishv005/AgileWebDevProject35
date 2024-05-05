@@ -27,7 +27,7 @@
                 {% if puzzle_list|length == 0 %}
                     <div class="h2 fs-1 text-white mb-4">"Use the CREATOR's USERNAME to search for the puzzle."</div>
                 {% else %}
-                    <div class="h2 fs-1 text-white mb-4">Puzzles by "{{username}}"</div>
+                    <div class="h2 fs-1 text-white mb-4">Puzzle's by <span style="color: #11ce50">"{{username}}"</span>, Choose ONE to PLAY</div>
                 {% endif %}
                 
                 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -48,11 +48,11 @@
                         <div class="row">
                         {% for puzzle in puzzle_list %}
                             <div class="col-md-4">
-                                <a class="card" style="border: 2px solid black; border-radius: 0.5rem; padding: 1rem; cursor: pointer; text-decoration: none;" href="{{url_for('display_word',username=username,puzzle_id=puzzle.puzzle_id)}}">
-                                    <h5 class="card-header" style="color:aliceblue;">Category</h5>
+                                <a class="card" href="{{url_for('display_word',username=username,puzzle_id=puzzle.puzzle_id)}}">
+                                    <h5 class="card-header" style="color: #009933;">Category Of The Word To Be Guessed</h5>
                                     <hr />
                                     <div class="card-body">
-                                        <h5 class="card-title" style="color:aliceblue;">{{puzzle.category}}</h5>
+                                        <h5 class="card-title">{{puzzle.category}}</h5>
                                     </div>
                                 </a>
                             </div>
