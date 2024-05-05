@@ -1,116 +1,85 @@
-{% if current_user.is_anonymous %}
-{% extends 'base.html' %}
-{% else %}
 {% extends 'base_inner.html' %}
-{% endif %}
-
 {% block content %}
+<style>
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(to right, #9900ff, #009933);
+    }
+    .leaderboard_class {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 50px;
+    }
+    .leaderboard_title {
+        color: #2c3e50;
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+    #leaderboard {
+        width: calc(100% - 90px);
+        max-width: 900px;
+        height: 500px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 5px solid transparent;
+        border-radius: 15px;
+        box-shadow: 0 0 20px 10px rgba(0, 255, 0, 0.5);
+    }
+    .hovered-bar {
+        cursor: pointer;
+        stroke: #009933;
+        stroke-width: 2px;
+    }
+    .plotly .main-svg {
+        font-family: 'Poppins', sans-serif;
+        border-radius: 15px;
+    }
+    .plotly text {
+        fill: #34495e;
+    }
+    .plotly .annotation {
+        font-size: 16px;
+        font-weight: bold;
+        color: #16a085;
+    }
+</style>
+
 <section class="leaderboard_class">
-    <h1 class="leaderboard_title">Top 10 Players</h1>
+    <h1 style="color: white;">Top 10 Player's</h1>
     <div id="leaderboard" class="leaderboard_graph"></div>
 </section>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
     fetch('/get_leaderboard')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             const usernames = data.map(entry => entry.username);
             const scores = data.map(entry => entry.score);
-            const maxScoreIndex = scores.indexOf(Math.max(...scores));
-
-            const colors = ['blue', 'green', 'red', 'black', 'brown']; // Define array of colors
-
             const trace = {
                 x: usernames,
                 y: scores,
                 type: 'bar',
                 marker: {
-                    color: 'rgba(50, 171, 96, 0.6)', // Customize color
+                    color: usernames.map((_, i) => i % 2 ? '#009933' : '#7f00ff'),
                     line: {
-                        color: 'rgba(50, 171, 96, 1)', // Customize border color
+                        color: '#34495e',
                         width: 2
-                    },
-                    // Custom marker for the highest score bar
-                    symbol: 'bar'
-                },
-                hoverinfo: 'none', // Hide default hover info
+                    }
+                }
             };
-
-            // Add annotations for the highest score
-            const highestScore = Math.max(...scores);
-            const highestScoreUsername = usernames[maxScoreIndex];
-            const annotation = {
-                x: highestScoreUsername,
-                y: highestScore,
-                text: '👏', // Change text to 'Leader'
-                font: {
-                    size: 48, // Increase the font size
-                    color: 'black'
-                },
-                arrowhead: 0, // Remove arrow
-                ax: 50,
-                ay: -10,
-            };
-            trace['text'] = scores.map(score => score === highestScore ? 'Leader' : 'Runner'); // Show hand emoji only for the leader
-            trace['textposition'] = 'outside';
-
             const layout = {
-                title: {
-                    text: 'Puzzle Leaderboard',
-                    font: {
-                        size: 20,
-                        color: '#0000FF'
-                    }
-                },
-                xaxis: {
-                    title: {
-                        text: 'Username',
-                        font: {
-                            size: 24,
-                            color: '#8A2BE2'
-                        }
-                    }
-                },
-                yaxis: {
-                    title: {
-                        text: 'Score',
-                        font: {
-                            size: 24,
-                            color: '#8A2BE2'
-                        }
-                    }
-                },
-                annotations: [annotation],
-                paper_bgcolor: '#40E0D0', // Change the background color of the graph to light blue
-                hovermode: 'closest', // Show hover info for the closest point
+                title: 'Puzzle Leaderboard',
+                paper_bgcolor: '#ecf0f1',
+                plot_bgcolor: '#ecf0f1',
+                xaxis: {title: 'Username'},
+                yaxis: {title: 'Score'},
+                hovermode: 'closest'
             };
-
-            const leaderboard = document.getElementById('leaderboard');
-            Plotly.newPlot(leaderboard, [trace], layout);
-
-            // Add event listener for bar hover
-            leaderboard.on('plotly_hover', function (data) {
-                const bars = document.querySelectorAll('.bars path');
-                bars.forEach((bar, index) => {
-                    if (index === data.points[0].pointNumber) {
-                        bar.classList.add('hovered-bar');
-                    } else {
-                        bar.classList.remove('hovered-bar');
-                    }
-                });
-            });
-
-            // Assigning colors to bars
-            const bars = document.querySelectorAll('.bars path');
-            bars.forEach((bar, index) => {
-                bar.style.fill = colors[index % colors.length];
-            });
+            Plotly.newPlot('leaderboard', [trace], layout);
         })
-        .catch(error => console.error('Error:', error));
-
+        .catch(error => console.error('Fetch Error:', error));
 </script>
 {% endblock %}
