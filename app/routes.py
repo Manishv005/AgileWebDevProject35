@@ -185,13 +185,44 @@ def display_word(username,puzzle_id):
         puzzle = Puzzle.query.get(puzzle_id)
         if puzzle:
             word = Word.query.get(puzzle.word_id)
-            return render_template('display_word.html', category=word.category, word_length=word.word_length,word=word.word)
+            return render_template('display_word.html',puzzle_id=puzzle_id, category=word.category, word_length=word.word_length,word=word.word)
         else:
             return render_template('search.html')
     else:
         return redirect(url_for("about"))
 
+@flask_app.route('/game_result', methods=['POST'])
+def game_result():
+    if current_user.is_authenticated:
+        if request.method == 'POST':
+            data = request.get_json()  # Get JSON data from the request
+            puzzle_id = data["puzzle_id"]
+            time_taken = data["time_taken"]
 
+            current_loggedin_user_id = current_user.user_id
+
+            if time_taken is None or puzzle_id is None or current_loggedin_user_id is None:
+                return jsonify({'Error': 'Internal server error'})
+            
+            # Assuming you want to give 100 points for the fastest time and reduce points as the time increases
+            SCORE = 100
+            score = SCORE - time_taken
+        
+            result = GameResult(
+                puzzle_id = puzzle_id,
+                user_id = current_loggedin_user_id,
+                time_spent = time_taken,
+                score = score,
+            )
+            db.session.add(result)
+            db.session.commit()
+
+            return jsonify({'message': 'Data received successfully'})
+        else:
+            return jsonify({'Error': 'Internal server error'})
+    else:
+        return redirect(url_for("about"))
+    
 
 
 # route for the logout function
