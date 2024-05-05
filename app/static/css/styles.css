@@ -1739,6 +1739,8 @@ section {
 .leaderboard_title {
   font-size: 24px;
   color: #333;
+  background-color: #9900ff;
+  font-style: oblique;
   margin-bottom: 20px;
   font-weight: bold;
   transition: color 0.3s ease-in-out;
@@ -1749,7 +1751,7 @@ section {
 }
 
 .leaderboard_graph {
-  width: 80%;
+  width: auto;
   margin: 0 auto;
 }
 
