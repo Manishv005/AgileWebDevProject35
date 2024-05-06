@@ -1,72 +1,102 @@
-{% extends 'base_inner.html' if not current_user.is_anonymous else 'base.html' %}
-{% block content %}
+{% extends 'base_inner.html' if not current_user.is_anonymous else 'base.html'
+%} {% block content %}
 <header class="masthead">
-    <div class="container px-5">
-        <div class="row gx-5 align-items-center">
-            <div class="col-lg-6">
-                <div class="mb-5 mb-lg-0 text-center text-lg-start">
-                    <h1 class="display-1 lh-1 mb-3">
-                        Search for <span style="color: blueviolet">Puzzles</span> you want to <span style="color: blueviolet">PLAY</span>.
-                    </h1>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="circular-video">
-                    <video muted autoplay loop class="video-in-circle">
-                        <source src="{{ url_for('static', filename='assets/img/puzzle.mp4') }}" type="video/mp4"/>
-                    </video>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container px-5">
+		<div class="row gx-5 align-items-center">
+			<div class="col-lg-6">
+				<div class="mb-5 mb-lg-0 text-center text-lg-start">
+					<h1 class="display-1 lh-1 mb-3">
+						Search for
+						<span style="color: blueviolet">Puzzles</span> you want
+						to <span style="color: blueviolet">PLAY</span>.
+					</h1>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="circular-video">
+					<video muted autoplay loop class="video-in-circle">
+						<source
+							src="{{ url_for('static', filename='assets/img/puzzle.mp4') }}"
+							type="video/mp4"
+						/>
+					</video>
+				</div>
+			</div>
+		</div>
+	</div>
 </header>
-<aside class="text-center bg-gradient-primary-to-secondary">
-    <div class="container px-5">
-        <div class="row gx-5 justify-content-center">
-            <div class="col-xl-8">
-                {% if puzzle_list|length == 0 %}
-                    <div class="h2 fs-1 text-white mb-4">"Use the CREATOR's USERNAME to search for the puzzle."</div>
-                {% else %}
-                    <div class="h2 fs-1 text-white mb-4">Puzzle's by <span style="color: #11ce50">"{{username}}"</span>, Choose ONE to PLAY</div>
-                {% endif %}
-                
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">{{ message }}</div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-                {% if puzzle_list|length == 0 %}
-                    <!-- Search Form -->
-                    <form action="{{ url_for('search') }}" method="POST" class="search-form">
-                        <input type="text" name="username" placeholder="Enter Username" class="search-input" required>
-                        <button type="submit" class="search-button">Search</button>
-                    </form>
-                {% else %}
-                    <div class="container mt-5" id="puzzle_list_id" style="scroll-margin-top: 13rem;">
-                        <div class="row">
-                        {% for puzzle in puzzle_list %}
-                            <div class="col-md-4">
-                                <a class="card" href="{{url_for('display_word',username=username,puzzle_id=puzzle.puzzle_id)}}">
-                                    <h5 class="card-header" style="color: #009933;">Category Of The Word To Be Guessed</h5>
-                                    <hr />
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{puzzle.category}}</h5>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+<aside class="text-center bg-gradient-primary-to-secondary" id="search-section">
+	<div class="container px-5">
+		<div class="row gx-5 justify-content-center">
+			<div class="col-xl-8">
+				{% if puzzle_list|length == 0 %}
+				<div class="h2 fs-1 text-white mb-4">
+					Use the CREATOR's USERNAME to search for the puzzle.
+				</div>
+				{% else %}
+				<div class="h2 fs-1 text-white mb-4">
+					Puzzle's by
+					<span style="color: #11ce50">"{{username}}"</span>, Choose
+					ONE to PLAY
+				</div>
+				{% endif %} {% with messages =
+				get_flashed_messages(with_categories=true) %} {% if messages %}
+				{% for category, message in messages %}
+				<div class="alert alert-{{ category }}" style="color: white">
+					{{ message }}
+				</div>
+				{% endfor %} {% endif %} {% endwith %} {% if puzzle_list|length
+				== 0 %}
+				<!-- Search Form -->
+				<form
+					action="{{ url_for('search') }}"
+					method="POST"
+					class="search-form"
+				>
+					<input
+						type="text"
+						name="username"
+						placeholder="Enter Username"
+						class="search-input"
+						required
+					/>
+					<button type="submit" class="search-button">Search</button>
+				</form>
+				{% else %}
+				<div
+					class="container mt-5"
+					id="puzzle_list_id"
+					style="scroll-margin-top: 13rem"
+				>
+					<div class="row">
+						{% for puzzle in puzzle_list %}
+						<div class="col-md-4">
+							<a
+								class="card"
+								href="{{url_for('display_word',username=username,puzzle_id=puzzle.puzzle_id)}}"
+							>
+								<h5 class="card-header" style="color: #009933">
+									Category Of The Word To Be Guessed
+								</h5>
+								<hr />
+								<div class="card-body">
+									<h5 class="card-title">
+										{{puzzle.category}}
+									</h5>
+								</div>
+							</a>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
 </aside>
 <script>
-    window.onload = function() {
-            document.getElementById('puzzle_list_id').scrollIntoView();
-        };
+	window.onload = function () {
+		document.getElementById("search-section").scrollIntoView();
+	};
 </script>
 {% endblock %}
