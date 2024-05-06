@@ -3,6 +3,7 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_moment import Moment
 
 flask_app = Flask(__name__)
 flask_app.config.from_object(Config)
@@ -13,5 +14,8 @@ migrate = Migrate(flask_app, db,render_as_batch=True)
 # The login manager for the app using the flask_login package
 login = LoginManager(flask_app)
 login.login_view = 'login'
+# Initializing the moment package
+moment = Moment(flask_app)
+
 
 from app import routes, models

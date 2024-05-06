@@ -31,7 +31,8 @@
 			<div class="col-xl-8">
 				{% if puzzle_list|length == 0 %}
 				<div class="h2 fs-1 text-white mb-4">
-					Use the CREATOR's USERNAME to search for the puzzle.
+					Use the CREATOR's USERNAME <br />
+					to search for a puzzle.
 				</div>
 				{% else %}
 				<div class="h2 fs-1 text-white mb-4">
@@ -62,6 +63,38 @@
 					/>
 					<button type="submit" class="search-button">Search</button>
 				</form>
+				<div
+					class="container px-5 mt-5 table-responsive"
+					style="scroll-margin-top: 13rem"
+				>
+					<table class="table justify-content-center">
+						<thead>
+							<tr>
+								<th scope="col">Username</th>
+								<th scope="col">Category</th>
+								<th scope="col">Creation Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for creator in recent_creators_list %}
+							<tr>
+								<th scope="row">{{creator.username}}</th>
+								<td>
+									<a
+										href="{{url_for('display_word', username=username, puzzle_id=creator.puzzle_id)}}"
+									>
+										{{creator.category}}
+									</a>
+								</td>
+								<td>
+									{{ moment(creator.creation_time).fromNow()
+									}}
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 				{% else %}
 				<div
 					class="container mt-5"
@@ -94,6 +127,7 @@
 		</div>
 	</div>
 </aside>
+
 <script>
 	window.onload = function () {
 		document.getElementById("search-section").scrollIntoView();

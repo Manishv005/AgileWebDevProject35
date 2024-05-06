@@ -140,14 +140,22 @@ def get_words():
 # View function for the Search page
 @flask_app.route('/search', methods=['GET', 'POST'])
 def search():
+    # Find the latest users to create a puzzle
+    recent_puzzles_query = Puzzle.query.order_by(Puzzle.date_created.desc()).limit(10).all()
+    recent_creators_list =[]
+    for recent_puzzle in recent_puzzles_query:
+        word = Word.query.get(recent_puzzle.word_id)
+        recent_creator = User.query.get(recent_puzzle.user_id)
+        recent_creators_list.append({"username":recent_creator.username,"creation_time":recent_puzzle.date_created,"category":word.category,"puzzle_id":recent_puzzle.puzzle_id})
     if request.method == 'POST':
         username = request.form['username']
         user = User.query.filter_by(username=username).first()
-        
         if user is None:
             flash("No such user found.", "error")
             # Display the search page again with an error message
             return render_template('search.html')
+
+        
 
         # Find the latest puzzle associated with this user
         puz_list = Puzzle.query.filter_by(user_id=user.user_id).order_by(Puzzle.date_created.desc()).limit(6).all() # Return List
@@ -156,6 +164,7 @@ def search():
             flash("No puzzles found for this user.", "error")
             return render_template('search.html')
         
+    
         puzzle_list = []
         for puzzle in puz_list:
             word = Word.query.get(puzzle.word_id)
@@ -172,11 +181,11 @@ def search():
         return render_template('display_word.html', category=word.category, word_length=word.word_length,word=word.word)
         '''
     
-        return render_template('search.html',username=username, puzzle_list=puzzle_list)
+        return render_template('search.html',username=username, puzzle_list=puzzle_list, recent_creators_list = recent_creators_list)
         
     else:
         # Handle GET request to show an empty search form
-        return render_template('search.html')
+        return render_template('search.html', recent_creators_list = recent_creators_list)
 
 # View function for the Search page
 @flask_app.route('/display_word/<username>/<puzzle_id>')

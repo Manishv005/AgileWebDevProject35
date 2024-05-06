@@ -72,7 +72,7 @@ class Puzzle(db.Model):
     puzzle_result: so.Mapped["GameResult"] = so.relationship(back_populates="has_puzzle")
     
     def __repr__(self):
-        return f"<Puzzle {self.category}>"
+        return f"<Puzzle {self.puzzle_id} {self.user_id} {self.word_id}>"
 
 
 # Results Table Creation
