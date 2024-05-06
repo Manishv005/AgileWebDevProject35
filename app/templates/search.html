@@ -25,7 +25,7 @@
         <div class="row gx-5 justify-content-center">
             <div class="col-xl-8">
                 {% if puzzle_list|length == 0 %}
-                    <div class="h2 fs-1 text-white mb-4">"Use the CREATOR's USERNAME to search for the puzzle."</div>
+                    <div class="h2 fs-1 text-white mb-4">"Choose the CREATOR's USERNAME to search for the puzzle."</div>
                 {% else %}
                     <div class="h2 fs-1 text-white mb-4">Puzzle's by <span style="color: #11ce50">"{{username}}"</span>, Choose ONE to PLAY</div>
                 {% endif %}
@@ -39,12 +39,31 @@
                 {% endwith %}
                 {% if puzzle_list|length == 0 %}
                     <!-- Search Form -->
-                    <form action="{{ url_for('search') }}" method="POST" class="search-form">
-                        <input type="text" name="username" placeholder="Enter Username" class="search-input" required>
+                    <form action="{{ url_for('search') }}" method="POST" class="search-form mb-3">
+                        <select class="login-form-input form-control" name="username" required>
+                            <option value="">Select a User</option>
+                            {% for username in usernames %}
+                                <option value="{{username}}">{{username}}</option>
+                            {% endfor %}
+                            <!-- Add more options as needed -->
+                        </select>
                         <button type="submit" class="search-button">Search</button>
                     </form>
                 {% else %}
                     <div class="container mt-5" id="puzzle_list_id" style="scroll-margin-top: 13rem;">
+                        <div class="row">
+                            <form action="{{ url_for('search') }}" method="POST" class="search-form mb-3">
+                                
+                                <select class="login-form-input form-control" name="username" required>
+                                    <option value="">Select a User</option>
+                                    {% for username in usernames %}
+                                        <option value="{{username}}">{{username}}</option>
+                                    {% endfor %}
+                                    <!-- Add more options as needed -->
+                                </select>
+                                <button type="submit" class="search-button">Search</button>
+                            </form>
+                        </div>
                         <div class="row">
                         {% for puzzle in puzzle_list %}
                             <div class="col-md-4">
