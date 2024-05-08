@@ -103,7 +103,7 @@ def profile():
                 flash("Invalid current password", "danger")
                 user = User.query.get(current_user.user_id)
                 form.username.data = user.username if form.username.data is None else form.username.data
-            form.email.data = user.email if form.email.data is None else form.email.data
+                form.email.data = user.email if form.email.data is None else form.email.data
                 form.password.data = ""
                 form.new_password.data = ""
             
