@@ -56,10 +56,12 @@
 				{% if current_user.is_authenticated %}
 				<button class="btn rounded-pill px-3 mb-2 mb-lg-0"
 					style="margin-right: 10px; background: #7f00ff; border: none; color: white;">
-					<span class="d-flex align-items-center">
-						<i class="bi-person-fill me-2"></i>
-						<span class="small">Welcome, {{ current_user.username }}</span>
-					</span>
+					<a href="{{url_for('profile')}}" style="text-decoration: none; color: white;">
+						<span class="d-flex align-items-center">
+							<i class="bi-person-fill me-2"></i>
+							<span class="small">Welcome, {{ current_user.username }}</span>
+						</span>
+					</a>
 				</button>
 				{% endif %}
 				<!-- Log Out button -->

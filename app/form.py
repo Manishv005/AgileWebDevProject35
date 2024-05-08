@@ -5,6 +5,7 @@ import sqlalchemy as sa
 from app import db
 from app.models import User
 from flask_wtf import FlaskForm
+from flask_login import current_user
 
 
 
@@ -38,6 +39,26 @@ class SignUpForm(FlaskForm):
     def validate_password(self, password):
         if ' ' in password.data:
             raise ValidationError('Password cannot contain spaces.')
+        
+class ProfileForm(FlaskForm):
+        
+    def validate_email(self, email):
+        user = User.query.filter(User.email == email.data).first()
+        if user and user.user_id != current_user.user_id:
+            raise ValidationError('Please use a different email address.')
+    
+    def validate_username(self, username):
+        user = User.query.filter(User.username == username.data).first()
+        if user and user.user_id != current_user.user_id:
+            raise ValidationError('Username already in use')
+        
+    username = StringField('Username', validators=[DataRequired(), validate_username])
+    email = StringField('Email', validators=[DataRequired(), Email(), validate_email])
+    password = PasswordField('Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired()])
+    submit = SubmitField('Update')
+
+    
 
         
 class CreatePuzzleForm(FlaskForm):

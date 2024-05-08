@@ -1,7 +1,7 @@
 # Monday, 22 April 2024
 from flask import jsonify, render_template, flash, redirect, url_for, request
 from app import flask_app
-from app.form import LoginForm, SignUpForm, CreatePuzzleForm
+from app.form import LoginForm, SignUpForm, CreatePuzzleForm, ProfileForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app import db
@@ -74,6 +74,49 @@ def signup():
         flash("Congratulations, you are now a registered user!", "success")
         return redirect(url_for("login"))
     return render_template("signup.html", title="Sign Up", form=form)
+
+@flask_app.route('/profile', methods=["GET", "POST"])
+def profile():
+    if current_user.is_authenticated:
+        form = ProfileForm()
+        if form.validate_on_submit():
+            user = User.query.get(current_user.user_id)
+
+            # Check if user exists
+            if user is None:
+                flash("Invalid username")
+                return redirect(url_for("login"))
+            
+            # if the entered password is correct then only update the profile
+            if user.check_password(form.password.data):
+                user.username = form.username.data
+                user.email = form.email.data
+                user.set_password(form.new_password.data)
+                # Commit the changes to the database
+                db.session.commit()
+                flash("Profile Updated successfully", "success")
+                form.username.data = ""
+                form.email.data = ""
+                form.password.data = ""
+                form.new_password.data = ""
+            else:
+                flash("Invalid current password", "danger")
+                user = User.query.get(current_user.user_id)
+                form.username.data = user.username if form.username.data is None else form.username.data
+            form.email.data = user.email if form.email.data is None else form.email.data
+                form.password.data = ""
+                form.new_password.data = ""
+            
+            return render_template('profile.html', title="Profile Page", form=form)    
+        else:
+            user = User.query.get(current_user.user_id)
+            form.username.data = user.username if form.username.data is None else form.username.data
+            form.email.data = user.email if form.email.data is None else form.email.data
+            form.password.data = ""
+            form.new_password.data = ""
+            return render_template('profile.html', title="Profile Page", form=form)
+    else:
+        return redirect(url_for("login"))
 
 
 # View function for the Create page
@@ -294,7 +337,6 @@ def game_result():
             return jsonify({"Error": "Internal server error"})
     else:
         return redirect(url_for("about"))
-
 
 # route for the logout function
 @flask_app.route("/logout")
