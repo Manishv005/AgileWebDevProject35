@@ -75,7 +75,8 @@ def signup():
         return redirect(url_for("login"))
     return render_template("signup.html", title="Sign Up", form=form)
 
-@flask_app.route('/profile', methods=["GET", "POST"])
+
+@flask_app.route("/profile", methods=["GET", "POST"])
 def profile():
     if current_user.is_authenticated:
         form = ProfileForm()
@@ -86,7 +87,7 @@ def profile():
             if user is None:
                 flash("Invalid username")
                 return redirect(url_for("login"))
-            
+
             # if the entered password is correct then only update the profile
             if user.check_password(form.password.data):
                 user.username = form.username.data
@@ -102,19 +103,25 @@ def profile():
             else:
                 flash("Invalid current password", "danger")
                 user = User.query.get(current_user.user_id)
-                form.username.data = user.username if form.username.data is None else form.username.data
-                form.email.data = user.email if form.email.data is None else form.email.data
+                form.username.data = (
+                    user.username if form.username.data is None else form.username.data
+                )
+                form.email.data = (
+                    user.email if form.email.data is None else form.email.data
+                )
                 form.password.data = ""
                 form.new_password.data = ""
-            
-            return render_template('profile.html', title="Profile Page", form=form)    
+
+            return render_template("profile.html", title="Profile Page", form=form)
         else:
             user = User.query.get(current_user.user_id)
-            form.username.data = user.username if form.username.data is None else form.username.data
+            form.username.data = (
+                user.username if form.username.data is None else form.username.data
+            )
             form.email.data = user.email if form.email.data is None else form.email.data
             form.password.data = ""
             form.new_password.data = ""
-            return render_template('profile.html', title="Profile Page", form=form)
+            return render_template("profile.html", title="Profile Page", form=form)
     else:
         return redirect(url_for("login"))
 
@@ -338,6 +345,7 @@ def game_result():
     else:
         return redirect(url_for("about"))
 
+
 # route for the logout function
 @flask_app.route("/logout")
 def logout():
@@ -349,9 +357,6 @@ def logout():
 @flask_app.route("/leaderboard")
 def leaderboard():
     return render_template("leaderboard.html", title="Leaderboard")
-
-
-from sqlalchemy import func
 
 
 @flask_app.route("/get_leaderboard")
@@ -376,12 +381,13 @@ def get_leaderboard_data():
     # Main query to join user_score_subquery and calculate the rank
     leaderTable = (
         db.session.query(
-            user_score_subquery.c.user_id,
+            User.username,
             user_score_subquery.c.total_score,
             func.rank()
             .over(order_by=user_score_subquery.c.total_score.desc())
             .label("rank"),
         )
+        .join(user_score_subquery, User.user_id == user_score_subquery.c.user_id)
         .order_by(user_score_subquery.c.total_score.desc())
         .limit(10)
         .all()
