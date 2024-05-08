@@ -1,0 +1,182 @@
+{% extends 'base_inner.html' %} {% block content %}
+
+    <!-- Profile Page Section -->
+    <section
+        class="signup-section"
+        style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px"
+    >
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                            <div id="alertDiv" class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Profile Form -->
+                    <div class="login-form-container">
+                        <h2 class="text-center" style="color: blueviolet">
+                            <span style="color: #009933">Profile</span>
+                        </h2>
+                        <form
+                            action="{{ url_for('profile') }}"
+                            method="post"
+                            novalidate
+                        >
+                            {{ form.hidden_tag() }}
+                            <div class="form-group mt-2">
+                                {{ form.username(class='login-form-input', size=32,
+                                placeholder='Username') }}
+                            </div>
+                            <div class="form-group mt-2">
+                                {{ form.email(class='login-form-input', size=64,
+                                placeholder='Email Address') }}
+                            </div>
+                            <div class="form-group mt-2">
+                                {{ form.password(class='login-form-input', size=32,
+                                placeholder='Current Password') }}
+                            </div>
+                            <div class="form-group mt-2">
+                                {{ form.new_password(class='login-form-input', size=32,
+                                placeholder='New Password') }}
+                            </div>
+                            <div class="d-grid gap-2 mb-3">
+                                <button type="submit" class="login-form-button">
+                                    {{ form.submit.label }}
+                                </button>
+                                <button type="button" class="login-form-button" id="cancelButton">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Error Modal -->
+    <div
+        class="modal fade"
+        id="errorModal"
+        tabindex="-1"
+        aria-labelledby="errorModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Profile Update Error</h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                        style="
+                            border: none;
+                            border-radius: 10px;
+                            padding: 5px 12px;
+                            font-size: 14px;
+                        "
+                    >
+                        Close
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="errorMessage"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript for Showing Error Modals -->
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var errorMessage = "";
+            var hasFormErrors = false;  // Flag to detect form errors
+    
+            // Username field error handling
+            {% if form.username.errors %}
+               {% for error in form.username.errors %}
+                       {% if error == "This field is required." %}
+                            errorMessage += "Enter a valid username.\n"; // Change the default error message
+                        {% else %}
+                            errorMessage += "{{error}}\n";
+                        {% endif %}
+               {% endfor%}
+            {% endif %}
+    
+            // Email field error handling
+            {% if form.email.errors %}
+                  {% for error in form.email.errors %}
+                       {% if error == "This field is required." %}
+                            errorMessage += "Enter a valid email address.\n"; // Change the default error message
+                        {% else %}
+                            errorMessage += "{{error}}\n";
+                        {% endif %}
+               {% endfor%}
+            {% endif %}
+    
+            // Password field error handling
+            {% if form.password.errors %}
+                  {% for error in form.password.errors %}
+                       {% if error == "This field is required." %}
+                            errorMessage += "Enter a password.\n"; // Change the default error message
+                        {% else %}
+                            errorMessage += "{{error}}\n";
+                        {% endif %}
+               {% endfor%}
+            {% endif %}
+    
+            // new_password password field error handling
+            {% if form.new_password.errors %}
+                  {% for error in form.new_password.errors %}
+                        {% if error == "This field is required." %}
+                            errorMessage += "Enter a new password.\n"; // Change the default error message
+                        {% else %}
+                            errorMessage += "{{error}}\n";
+                        {% endif %}
+               {% endfor%}
+            {% endif %}
+    
+            // Error handling for all empty fields
+            {% if form.username.errors and form.password.errors and form.email.errors and form.new_password.errors %}
+                errorMessage = "Make sure you have entered all the fields required to Profile onto our platform.\n\n";
+                hasFormErrors = true;  // There are form errors
+            {% endif %}
+    
+    
+            // If there are any errors, display the error modal
+            if (hasFormErrors || errorMessage !== "") {
+                document.getElementById("errorMessage").innerText = errorMessage;
+                var errorModal = new bootstrap.Modal(document.getElementById('errorModal'), {
+                    keyboard: false
+                });
+                errorModal.show();
+            }
+
+            var cancelButton = document.getElementById('cancelButton');
+            if (cancelButton) 
+            {
+                cancelButton.addEventListener('click', function() 
+                {
+                    window.location.href = '/home';
+                });
+            }
+
+            // Get the alert div
+            var alertDiv = document.getElementById('alertDiv');
+    
+            // Function to hide the alert div after three seconds
+            setTimeout(function() 
+            {
+                alertDiv.style.display = 'none';
+                window.location.href = '/home';
+            }, 3000); // 3000 milliseconds = 3 seconds
+        });
+    </script>
+    
+{% endblock %}
