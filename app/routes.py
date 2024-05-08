@@ -7,6 +7,7 @@ import sqlalchemy as sa
 from app import db
 from app.models import User, GameResult, Word, Puzzle
 from urllib.parse import urlsplit
+from sqlalchemy.sql import func
 
 # The routes for / and home using the view function home()
 # A decorator(@flask_app) modifies the function that follows it.
@@ -131,140 +132,209 @@ def create():
         new_word = Word(
             category=form.category.data,
             word=selected_word,
-            word_length=len(selected_word)  # Calculate word length dynamically
+            word_length=len(selected_word),  # Calculate word length dynamically
         )
         db.session.add(new_word)
         db.session.commit()
 
-
         # Create a new Puzzle instance using data from the form
         new_puzzle = Puzzle(
-             user_id=current_user.user_id,
-             word_id=new_word.word_id # Use the id of the newly created word
-         )
+            user_id=current_user.user_id,
+            word_id=new_word.word_id,  # Use the id of the newly created word
+        )
         db.session.add(new_puzzle)
         db.session.commit()  # Commit the session to save the puzzle to the database
-        
+
         flash("Puzzle created successfully!", "success")
-        return redirect(url_for("home"))  # Redirect to the home page after successful creation
+        return redirect(
+            url_for("home")
+        )  # Redirect to the home page after successful creation
 
     # Render the create.html template with the form
     return render_template("create.html", title="Create Puzzles", form=form)
 
+
 # Word Creation and AJAX to fetch the word based on category selected.
-@flask_app.route('/get_words/')
+@flask_app.route("/get_words/")
 def get_words():
-    category = request.args.get('category', '', type=str)
+    category = request.args.get("category", "", type=str)
     words_dict = {
-        'fruits': [
-            "Apple", "Blueberry", "Mandarin", "Pineapple", "Pomegranate",
-            "Watermelon", "Kiwi", "Guava", "Mango", "Apricot", "Cherry"
+        "fruits": [
+            "Apple",
+            "Blueberry",
+            "Mandarin",
+            "Pineapple",
+            "Pomegranate",
+            "Watermelon",
+            "Kiwi",
+            "Guava",
+            "Mango",
+            "Apricot",
+            "Cherry",
         ],
-        'animals': [
-            "Hedgehog", "Rhinoceros", "Squirrel", "Panther", "Walrus",
-            "Zebra", "Elephant", "Giraffe", "Kangaroo", "Lion", "Tiger"
+        "animals": [
+            "Hedgehog",
+            "Rhinoceros",
+            "Squirrel",
+            "Panther",
+            "Walrus",
+            "Zebra",
+            "Elephant",
+            "Giraffe",
+            "Kangaroo",
+            "Lion",
+            "Tiger",
         ],
-        'countries': [
-            "India", "Hungary", "Kyrgyzstan", "Switzerland", "Zimbabwe",
-            "Dominica", "Nepal", "Australia", "Morocco", "Portugal", "Brazil"
+        "countries": [
+            "India",
+            "Hungary",
+            "Kyrgyzstan",
+            "Switzerland",
+            "Zimbabwe",
+            "Dominica",
+            "Nepal",
+            "Australia",
+            "Morocco",
+            "Portugal",
+            "Brazil",
         ],
-        'car_brands': [
-            "Toyota", "Honda", "Ford", "Chevrolet", "Tesla",
-            "Nissan", "BMW", "Mercedes", "Audi", "Volkswagen", "Porsche"
+        "car_brands": [
+            "Toyota",
+            "Honda",
+            "Ford",
+            "Chevrolet",
+            "Tesla",
+            "Nissan",
+            "BMW",
+            "Mercedes",
+            "Audi",
+            "Volkswagen",
+            "Porsche",
         ],
-        'colors': [
-            "Red", "Blue", "Green", "Yellow", "Orange",
-            "Purple", "Black", "White", "Pink", "Gray", "Cyan"
-        ]
+        "colors": [
+            "Red",
+            "Blue",
+            "Green",
+            "Yellow",
+            "Orange",
+            "Purple",
+            "Black",
+            "White",
+            "Pink",
+            "Gray",
+            "Cyan",
+        ],
     }
     words = words_dict.get(category, [])
     return jsonify(words)
 
+
 # View function for the Search page
-@flask_app.route('/search', methods=['GET', 'POST'])
+@flask_app.route("/search", methods=["GET", "POST"])
 def search():
     users = User.query.all()
     usernames = [user.username for user in users]
-    if request.method == 'POST':
-        username = request.form['username']
+    if request.method == "POST":
+        username = request.form["username"]
         user = User.query.filter_by(username=username).first()
-        
+
         if user is None:
             flash("No such user found.", "error")
             # Display the search page again with an error message
-            return render_template('search.html', usernames=usernames)
+            return render_template("search.html", usernames=usernames)
 
         # Find the latest puzzle associated with this user
-        puz_list = Puzzle.query.filter_by(user_id=user.user_id).order_by(Puzzle.date_created.desc()).limit(6).all() # Return List
+        puz_list = (
+            Puzzle.query.filter_by(user_id=user.user_id)
+            .order_by(Puzzle.date_created.desc())
+            .limit(6)
+            .all()
+        )  # Return List
 
         if not puz_list:
             flash("No puzzles found for this user.", "error")
-            return render_template('search.html', usernames=usernames)
-        
+            return render_template("search.html", usernames=usernames)
+
         puzzle_list = []
         for puzzle in puz_list:
             word = Word.query.get(puzzle.word_id)
             if not word:
                 flash("No word found for the latest puzzle.", "error")
-                return render_template('search.html')
-            puzzle_list.append({"puzzle_id":puzzle.puzzle_id,"category":word.category, "word_length":word.word_length,"word":word.word})
-        '''
-        if not word:
-            flash("No word found for the latest puzzle.", "error")
-            return render_template('search.html')
+                return render_template("search.html")
+            puzzle_list.append(
+                {
+                    "puzzle_id": puzzle.puzzle_id,
+                    "category": word.category,
+                    "word_length": word.word_length,
+                    "word": word.word,
+                }
+            )
 
-        # Redirect to a new page that displays the category and blanks for the word length
-        return render_template('display_word.html', category=word.category, word_length=word.word_length,word=word.word)
-        '''
-    
-        return render_template('search.html',usernames=usernames,username=username, puzzle_list=puzzle_list)
-        
+        return render_template(
+            "search.html",
+            usernames=usernames,
+            username=username,
+            puzzle_list=puzzle_list,
+        )
+
     else:
         # Handle GET request to show an empty search form
-        return render_template('search.html', usernames=usernames)
+        return render_template("search.html", usernames=usernames)
+
 
 # View function for the Search page
-@flask_app.route('/display_word/<username>/<puzzle_id>')
-def display_word(username,puzzle_id):
+@flask_app.route("/display_word/<username>/<puzzle_id>")
+def display_word(username, puzzle_id):
     if current_user.is_authenticated:
         puzzle = Puzzle.query.get(puzzle_id)
         if puzzle:
             word = Word.query.get(puzzle.word_id)
-            return render_template('display_word.html',puzzle_id=puzzle_id, category=word.category, word_length=word.word_length,word=word.word)
+            return render_template(
+                "display_word.html",
+                puzzle_id=puzzle_id,
+                category=word.category,
+                word_length=word.word_length,
+                word=word.word,
+            )
         else:
-            return render_template('search.html')
+            return render_template("search.html")
     else:
         return redirect(url_for("about"))
 
-@flask_app.route('/game_result', methods=['POST'])
+
+@flask_app.route("/game_result", methods=["POST"])
 def game_result():
     if current_user.is_authenticated:
-        if request.method == 'POST':
+        if request.method == "POST":
             data = request.get_json()  # Get JSON data from the request
             puzzle_id = data["puzzle_id"]
             time_taken = data["time_taken"]
 
             current_loggedin_user_id = current_user.user_id
 
-            if time_taken is None or puzzle_id is None or current_loggedin_user_id is None:
-                return jsonify({'Error': 'Internal server error'})
-            
+            if (
+                time_taken is None
+                or puzzle_id is None
+                or current_loggedin_user_id is None
+            ):
+                return jsonify({"Error": "Internal server error"})
+
             # Assuming you want to give 100 points for the fastest time and reduce points as the time increases
             SCORE = 100
             score = SCORE - time_taken
-        
+
             result = GameResult(
-                puzzle_id = puzzle_id,
-                user_id = current_loggedin_user_id,
-                time_spent = time_taken,
-                score = score,
+                puzzle_id=puzzle_id,
+                user_id=current_loggedin_user_id,
+                time_spent=time_taken,
+                score=score,
             )
             db.session.add(result)
             db.session.commit()
 
-            return jsonify({'message': 'Data received successfully'})
+            return jsonify({"message": "Data received successfully"})
         else:
-            return jsonify({'Error': 'Internal server error'})
+            return jsonify({"Error": "Internal server error"})
     else:
         return redirect(url_for("about"))
 
@@ -281,8 +351,48 @@ def leaderboard():
     return render_template("leaderboard.html", title="Leaderboard")
 
 
+from sqlalchemy import func
+
+
 @flask_app.route("/get_leaderboard")
-def get_leaderboard():
-    leaderTable = GameResult.query.all()
-    data = [{"username": entry.user_id, "score": entry.score} for entry in leaderTable]
+def get_leaderboard_data():
+    # Subquery to calculate the sum of scores for each user
+    user_score_subquery = (
+        db.session.query(
+            GameResult.user_id, func.sum(GameResult.score).label("total_score")
+        )
+        .group_by(GameResult.user_id)
+        .subquery()
+    )
+
+    # Query to get the total number of unique users
+    total_user_count_query = db.session.query(
+        func.count(user_score_subquery.c.user_id).label("total_users")
+    )
+
+    # Get the total user count
+    total_users = total_user_count_query.scalar()
+
+    # Main query to join user_score_subquery and calculate the rank
+    leaderTable = (
+        db.session.query(
+            user_score_subquery.c.user_id,
+            user_score_subquery.c.total_score,
+            func.rank()
+            .over(order_by=user_score_subquery.c.total_score.desc())
+            .label("rank"),
+        )
+        .order_by(user_score_subquery.c.total_score.desc())
+        .limit(10)
+        .all()
+    )
+    # To calculate the rank and score for the user to disply in the graph
+    data = [
+        {
+            "username": entry[0],
+            "score": entry[1],
+            "rank": f"{entry[2]} / {total_users} Users",
+        }
+        for entry in leaderTable
+    ]
     return jsonify(data)
