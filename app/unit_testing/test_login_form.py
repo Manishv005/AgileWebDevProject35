@@ -75,17 +75,19 @@ def test_login_form_report():
     Failure Message:
         HTML report generation failed.
     """
-    # Run pytest command to generate HTML report
+    # Run pytest command to generate HTML report for login form test cases only
     pytest.main(
         [
             "-v",
-            "--html=app/unit_testing/unit_test_report.html",
+            "--html=app/unit_testing/unit_test_login_report.html",
             "--self-contained-html",
             "--capture=no",  # Ensure that output is not captured
+            "-k",
+            "test_login_form",  # Filter tests based on their names
         ]
     )
 
     # Check if HTML report is generated successfully
     assert os.path.exists(
-        "app/unit_testing/unit_test_report.html"
+        "app/unit_testing/unit_test_login_report.html"
     ), "HTML report generation failed"
