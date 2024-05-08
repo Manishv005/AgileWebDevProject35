@@ -1,5 +1,13 @@
 {% extends 'base_inner.html' if not current_user.is_anonymous else 'base.html' %}
 {% block content %}
+<style>
+    /* Style for the dropdown menus */
+    .form-control {
+        height: 50px; /* Adjust the height as needed */
+        font-size: 16px; /* Adjust the font size as needed for better readability */
+        line-height: 1.5; /* Ensuring the text aligns well within the increased height */
+    }
+</style>
 <header class="masthead">
     <div class="container px-5">
         <div class="row gx-5 align-items-center">
