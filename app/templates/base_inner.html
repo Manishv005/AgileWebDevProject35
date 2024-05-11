@@ -39,29 +39,27 @@
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
 					<li class="nav-item">
-						<a class="nav-link me-lg-3" href="{{ url_for('home') }}">Home.</a>
+						<a class="nav-link me-lg-3" href="{{ url_for('home') }}" style="{{ 'font-weight: bold; color: blueviolet; box-shadow: 0 0 8px blueviolet; border-radius: 10px;' if request.endpoint == 'home' else '' }}">Home.</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link me-lg-3" href="{{ url_for('create') }}">Create Puzzles.</a>
+						<a class="nav-link me-lg-3" href="{{ url_for('create') }}" style="{{ 'font-weight: bold; color: blueviolet; box-shadow: 0 0 8px blueviolet; border-radius: 10px;' if request.endpoint == 'create' else '' }}">Create Puzzles.</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link me-lg-3" href="{{ url_for('search') }}">Search Puzzles.</a>
+						<a class="nav-link me-lg-3" href="{{ url_for('search') }}" style="{{ 'font-weight: bold; color: blueviolet; box-shadow: 0 0 8px blueviolet; border-radius: 10px;' if request.endpoint == 'search' else '' }}">Search Puzzles.</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link me-lg-3" href="{{ url_for('leaderboard') }}">Leader Board.</a>
+						<a class="nav-link me-lg-3" href="{{ url_for('leaderboard') }}" style="{{ 'font-weight: bold; color: blueviolet; box-shadow: 0 0 8px blueviolet; border-radius: 10px;' if request.endpoint == 'leaderboard' else '' }}">Leader Board.</a>
 					</li>
 				</ul>
-
+				
 				<!-- Welcome message and profile button -->
 				{% if current_user.is_authenticated %}
 				<button class="btn rounded-pill px-3 mb-2 mb-lg-0"
 					style="margin-right: 10px; background: #7f00ff; border: none; color: white;">
-					<a href="{{url_for('profile')}}" style="text-decoration: none; color: white;">
-						<span class="d-flex align-items-center">
-							<i class="bi-person-fill me-2"></i>
-							<span class="small">Welcome, {{ current_user.username }}</span>
-						</span>
-					</a>
+					<span class="d-flex align-items-center">
+						<i class="bi-person-fill me-2"></i>
+						<span class="small">Welcome, {{ current_user.username }}</span>
+					</span>
 				</button>
 				{% endif %}
 				<!-- Log Out button -->
