@@ -239,8 +239,11 @@ def get_words():
 # View function for the Search page
 @flask_app.route("/search", methods=["GET", "POST"])
 def search():
-    users = User.query.all()
-    usernames = [user.username for user in users]
+    stmt = db.session.query(User,Puzzle).filter(User.user_id == Puzzle.user_id).all()
+    unique_users = set()
+    for user, _ in stmt:
+        unique_users.add(user.username)
+    unique_users_list = list(unique_users)
     if request.method == "POST":
         username = request.form["username"]
         user = User.query.filter_by(username=username).first()
@@ -248,7 +251,7 @@ def search():
         if user is None:
             flash("No such user found.", "error")
             # Display the search page again with an error message
-            return render_template("search.html", usernames=usernames)
+            return render_template("search.html", usernames=unique_users_list)
 
         # Find the latest puzzle associated with this user
         puz_list = (
@@ -260,7 +263,7 @@ def search():
 
         if not puz_list:
             flash("No puzzles found for this user.", "error")
-            return render_template("search.html", usernames=usernames)
+            return render_template("search.html", usernames=unique_users_list)
 
         puzzle_list = []
         for puzzle in puz_list:
@@ -279,14 +282,14 @@ def search():
 
         return render_template(
             "search.html",
-            usernames=usernames,
+            usernames=unique_users_list,
             username=username,
             puzzle_list=puzzle_list,
         )
 
     else:
         # Handle GET request to show an empty search form
-        return render_template("search.html", usernames=usernames)
+        return render_template("search.html", usernames=unique_users_list)
 
 
 # View function for the Search page
