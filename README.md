@@ -1,4 +1,4 @@
-# Project : # AgileWebDevProject : PuzzleMe
+# Project : AgileWebDevProject : PuzzleMe
 
 ## Author : Group 35
 Date: May 2024
@@ -28,11 +28,11 @@ PuzzleMe is developed using the following tech stack:
 * Websockets
 * SQLite (accessed via the SQLAlchemy package)
 
-###  Unit Testing: Pytest
+* Unit Testing: Pytest
 
-### Code Repository: GIT
+* Code Repository: GIT
 
-### Issue Management: GIT/Issues
+* Issue Management: GIT/Issues
 
 
 ## Main Features
@@ -86,6 +86,48 @@ Rules to play the game:
 
 6. Timer: The timer starts at the beginning of each game and stops when the game ends. The time taken affects the user's score and ranking on the leaderboard.
 
+## PuzzleMe Architecture Summary
+
+PuzzleMe is a dynamic online platform that allows users to create, search, and play puzzles. The platform is built using a combination of frontend and backend technologies to provide a seamless user experience. With a user-friendly interface, robust backend logic, and efficient deployment, PuzzleMe provides an enjoyable experience for puzzle enthusiasts and creators alike.
+
+
+### Frontend Architecture
+The frontend of PuzzleMe is designed to provide an interactive and intuitive user interface. It utilizes HTML5, CSS, Bootstrap, and jQuery for layout, styling, and dynamic content generation. AJAX and Flask is used for asynchronous communication with the backend, enabling seamless updates and interactions without page reloads.
+
+#### Key Components:
+* HTML5: Provides the structure of web pages.
+* CSS & Bootstrap: Handle styling and layout of the web application, ensuring a responsive design across different devices.
+* jQuery: Enables dynamic and interactive elements on the frontend, such as form validation and event handling.
+* AJAX: Facilitates asynchronous communication with the backend server, allowing for real-time updates without full page reloads.
+
+ ### Backend Architecture
+The backend of PuzzleMe is powered by Flask, a lightweight web framework for Python. It handles user authentication, puzzle creation, search functionality, and gameplay logic. The backend also interacts with a SQLite database through the SQLAlchemy package for data storage and retrieval.
+
+#### Key Components:
+* Flask: Provides the foundation for building web applications in Python, handling routing, request handling, and response generation.
+* SQLite & SQLAlchemy: Utilized for database management, storing user information, puzzle data, and leaderboard scores.
+* Websockets: Used for real-time communication between the client and server, particularly during gameplay to update the puzzle status and timer.
+* Unit Testing (Pytest): Ensures the reliability and correctness of the backend codebase through automated testing.
+
+### Deployment Architecture
+PuzzleMe is deployed on local server which can be accessed after running the application as per getting started instruction below.
+
+#### Key Components:
+* Server Environment: Provides the infrastructure for hosting the PuzzleMe application.
+* Database Server: Hosts the SQLite database containing user profiles, puzzle data, and leaderboard scores.
+* Issue Management (GIT/Issues): Tracks and manages bugs, pull request, team intrecation, feature requests, and tasks related to the project's development and maintenance.
+* Code Repository (GIT): Stores the source code of PuzzleMe, allowing for version control and collaboration among developers.
+
+
+## Getting Started for contribution 
+
+* Clone the repository from GIT Repository : https://github.com/Manishv005/AgileWebDevProject35
+
+* Create a new branch ( Example : git checkout -b feature/new-feature).
+* Make your changes and commit them ( Example : git commit -am 'Add new feature').
+* Push to the branch (Example : git push origin feature/new-feature).
+* Create a new Pull Request.
+* Run the application on your local machine.
 
 ## Development Setup Instructions
 
