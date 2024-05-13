@@ -280,6 +280,24 @@ p {
   /* Pointer cursor on hover */
 }
 
+.btn-group:hover .dropdown-menu {
+  display: block; /* Show the dropdown */
+}
+
+/* Optional: Add some CSS for visual confirmation */
+.btn-group .dropdown-toggle:focus {
+  box-shadow: none; /* Remove focus outline when clicked */
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
 .search-button:hover {
   background-color: #45a049;
   /* Slightly darker green on hover */
