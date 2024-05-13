@@ -47,8 +47,8 @@
                                 <button type="submit" class="login-form-button">
                                     {{ form.submit.label }}
                                 </button>
-                                <button type="button" class="login-form-button" id="cancelButton">
-                                    Cancel
+                                <button type="button" class="login-form-button" id="backButton">
+                                    <label for="button">Back</label>
                                 </button>
                             </div>
                         </form>
@@ -156,12 +156,13 @@
                     keyboard: false
                 });
                 errorModal.show();
+                clearTimeout(timeOut)
             }
 
-            var cancelButton = document.getElementById('cancelButton');
-            if (cancelButton) 
+            var backButton = document.getElementById('backButton');
+            if (backButton) 
             {
-                cancelButton.addEventListener('click', function() 
+                backButton.addEventListener('click', function() 
                 {
                     window.location.href = '/home';
                 });
@@ -171,10 +172,10 @@
             var alertDiv = document.getElementById('alertDiv');
     
             // Function to hide the alert div after three seconds
-            setTimeout(function() 
+            var timeOut = setTimeout(function() 
             {
                 alertDiv.style.display = 'none';
-                window.location.href = '/home';
+                // window.location.href = '/home';
             }, 3000); // 3000 milliseconds = 3 seconds
         });
     </script>
