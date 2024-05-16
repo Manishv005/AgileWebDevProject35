@@ -1,0 +1,104 @@
+{% extends 'base_inner.html' %}
+{% block content %}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(to right, #9900ff, #009933);
+    }
+
+    .leaderboard_class {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 50px;
+    }
+
+    .leaderboard_title {
+        color: #2c3e50;
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    #leaderboard {
+        width: calc(100% - 90px);
+        max-width: 900px;
+        height: 500px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 5px solid transparent;
+        border-radius: 15px;
+        box-shadow: 0 0 20px 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .hovered-bar {
+        cursor: pointer;
+        stroke: #009933;
+        stroke-width: 2px;
+    }
+
+    .plotly .main-svg {
+        font-family: 'Poppins', sans-serif;
+        border-radius: 15px;
+    }
+
+    .plotly text {
+        fill: #34495e;
+    }
+
+    .plotly .annotation {
+        font-size: 16px;
+        font-weight: bold;
+        color: #16a085;
+    }
+</style>
+
+<section class="leaderboard_class">
+    <h1 style="color: white;">Top 10 Player's</h1>
+    <div id="leaderboard" class="leaderboard_graph"></div>
+</section>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    function fetchLeaderboard() {
+        fetch('/get_leaderboard')
+            .then(response => response.json())
+            .then(data => {
+                const usernames = data.map(entry => entry.username);
+                const scores = data.map(entry => entry.score);
+                const ranks = data.map(entry => entry.rank);
+                const colors = data.map((_, i) => i % 10);
+
+                // setup color coding for bar in the graph
+                const colorPalette = ['#7f00ff', '#009933', '#ff0000', '#00ffcc', '#ff6600', '#3399ff', '#ff3399', '#00cc66', '#6600cc', '#ffff00'];
+
+                const trace = {
+                    x: usernames,
+                    y: scores,
+                    text: scores.map((score, i) => `Rank: ${ranks[i]}<br>Score: ${score}`),
+                    hoverinfo: 'text',
+                    type: 'bar',
+                    marker: {
+                        color: colors.map(index => colorPalette[index]),
+
+                    }
+                };
+                const layout = {
+                    title: 'Puzzle Leaderboard',
+                    paper_bgcolor: '#ecf0f1',
+                    plot_bgcolor: '#ecf0f1',
+                    xaxis: { title: 'Username', tickvals: usernames, ticktext: usernames, tickfont: { family: 'Poppins, sans-serif', color: 'blue', size: 15, weight: 'bold' } },
+                    yaxis: { title: 'Score', tickfont: { family: 'Poppins, sans-serif', color: 'blue', size: 15, weight: 'bold' } },
+                    hovermode: 'closest'
+                };
+                Plotly.newPlot('leaderboard', [trace], layout);
+            })
+            .catch(error => console.error('Fetch Error:', error));
+    }
+
+    // Fetch leaderboard initially and set interval to update it every 4 seconds
+    fetchLeaderboard();
+    setInterval(fetchLeaderboard, 4000);
+</script>
+
+
+{% endblock %}
