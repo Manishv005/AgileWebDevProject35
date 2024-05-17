@@ -28,7 +28,7 @@ PuzzleMe is developed using the following tech stack:
 * Websockets
 * SQLite (accessed via the SQLAlchemy package)
 
-* Unit Testing: Pytest
+* Unit Testing: Pytest & Selenium 
 
 * Code Repository: GIT
 
