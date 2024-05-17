@@ -202,4 +202,16 @@ PuzzleMe is deployed on local server which can be accessed after running the app
     This will provide you with a link to the app running on localhost:5000, which you can then open in a web browser.
 
 ## Testing Setup Instructions
-"Will add them"
+Selenium Testing:
+
+Run the Flask app in one terminal window:
+```
+flask run
+
+```
+Run the tests in another terminal window:
+```
+pytest app/selenium_tests/
+```
+This will execute all the tests located in the app/selenium_tests/ directory and provide a report of the test results.
+
