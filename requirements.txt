@@ -70,3 +70,6 @@ webencodings==0.5.1
 Werkzeug==3.0.2
 WTForms==3.1.2
 yarg==0.1.9
+selenium==4.0.0
+pytest==6.2.5
+webdriver-manager==3.8.5
