@@ -202,7 +202,7 @@ PuzzleMe is deployed on local server which can be accessed after running the app
     This will provide you with a link to the app running on localhost:5000, which you can then open in a web browser.
 
 ## Testing Setup Instructions
-Selenium Testing:
+### Selenium Testing:
 
 Run the Flask app in one terminal window:
 ```
@@ -214,4 +214,59 @@ Run the tests in another terminal window:
 pytest app/selenium_tests/
 ```
 This will execute all the tests located in the app/selenium_tests/ directory and provide a report of the test results.
+
+### Pytest Testing:
+
+Step 1: Install pytest
+
+```
+pip install pytest
+```
+Step 2: Create Test Files 
+Create test files in your project. By convention, pytest looks for files that start with test_ or end with _test.py.
+
+For example:
+#### test_example.py
+def test_addition():
+    assert 1 + 1 == 2
+
+def test_subtraction():
+    assert 2 - 1 == 1
+
+Step 3: Run pytest
+Navigate to your project directory in the command line and run pytest.
+
+```
+pytest
+```
+
+Run tests in a specific file:
+
+```
+pytest test_example.py
+```
+Run a specific test function:
+
+```
+pytest test_example.py::test_addition
+```
+Show detailed output:
+
+```
+pytest -v
+```
+
+You should see output similar to or create a html report to see the output.
+
+```
+
+============================= test session starts ==============================
+platform darwin -- Python 3.8.5, pytest-6.2.4, py-1.10.0, pluggy-0.13.1
+rootdir: /path/to/your/project
+collected 3 items
+
+test_math.py ...                                                         [100%]
+
+============================== 3 passed in 0.02s ===============================
+```
 
