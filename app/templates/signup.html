@@ -1,10 +1,7 @@
 {% if current_user.is_anonymous %} {% extends 'base.html' %} {% else %} {%
 extends 'base_inner.html' %} {% endif %} {% block content %}
 <!-- SignUp Page Section -->
-<section
-	class="signup-section"
-	style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px"
->
+<section class="signup-section" style="background-color: #f8f9fa; padding-top: 250px; padding-bottom: 100px">
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-md-6">
@@ -13,11 +10,7 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 					<h2 class="text-center" style="color: blueviolet">
 						<span style="color: #009933">SignUp</span> to PuzzleMe
 					</h2>
-					<form
-						action="{{ url_for('signup') }}"
-						method="post"
-						novalidate
-					>
+					<form action="{{ url_for('signup') }}" method="post" novalidate>
 						{{ form.hidden_tag() }}
 						<div class="form-group mt-2">
 							{{ form.username(class='login-form-input', size=32,
@@ -48,29 +41,17 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 </section>
 
 <!-- Error Modal -->
-<div
-	class="modal fade"
-	id="errorModal"
-	tabindex="-1"
-	aria-labelledby="errorModalLabel"
-	aria-hidden="true"
->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="errorModalLabel">SignUp Error</h5>
-				<button
-					type="button"
-					class="btn-close"
-					data-bs-dismiss="modal"
-					aria-label="Close"
-					style="
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="
 						border: none;
 						border-radius: 10px;
 						padding: 5px 12px;
 						font-size: 14px;
-					"
-				>
+					">
 					Close
 				</button>
 			</div>
@@ -82,70 +63,70 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 </div>
 
 <!-- JavaScript for Showing Error Modals -->
-<script type="text/javascript">
-	document.addEventListener("DOMContentLoaded", function() {
-	    var errorMessage = "";
-	    var hasFormErrors = false;  // Flag to detect form errors
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		var errorMessage = "";
+		var hasFormErrors = false;  // Flag to detect form errors
 
-	    // Username field error handling
-	    {% if form.username.errors %}
-	       {% for error in form.username.errors %}
-	               {% if error == "This field is required." %}
-	                    errorMessage += "Enter a valid username.\n"; // Change the default error message
-	                   {% else %}
-	                       errorMessage += "{{error}}\n";
-	                {% endif %}
-	       {% endfor%}
-	    {% endif %}
+		// Username field error handling
+		{% if form.username.errors %}
+		{% for error in form.username.errors %}
+		{% if error == "This field is required." %}
+		errorMessage += "Enter a valid username.\n"; // Change the default error message
+		{% else %}
+		errorMessage += "{{error}}\n";
+		{% endif %}
+		{% endfor %}
+		{% endif %}
 
-	    // Email field error handling
-	    {% if form.email.errors %}
-	          {% for error in form.email.errors %}
-	               {% if error == "This field is required." %}
-	                    errorMessage += "Enter a valid email address.\n"; // Change the default error message
-	                   {% else %}
-	                       errorMessage += "{{error}}\n";
-	                {% endif %}
-	       {% endfor%}
-	    {% endif %}
+		// Email field error handling
+		{% if form.email.errors %}
+		{% for error in form.email.errors %}
+		{% if error == "This field is required." %}
+		errorMessage += "Enter a valid email address.\n"; // Change the default error message
+		{% else %}
+		errorMessage += "{{error}}\n";
+		{% endif %}
+		{% endfor %}
+		{% endif %}
 
-	    // Password field error handling
-	    {% if form.password.errors %}
-	          {% for error in form.password.errors %}
-	               {% if error == "This field is required." %}
-	                    errorMessage += "Enter a password.\n"; // Change the default error message
-	                   {% else %}
-	                       errorMessage += "{{error}}\n";
-	                {% endif %}
-	       {% endfor%}
-	    {% endif %}
+		// Password field error handling
+		{% if form.password.errors %}
+		{% for error in form.password.errors %}
+		{% if error == "This field is required." %}
+		errorMessage += "Enter a password.\n"; // Change the default error message
+		{% else %}
+		errorMessage += "{{error}}\n";
+		{% endif %}
+		{% endfor %}
+		{% endif %}
 
-	    // Confirm password field error handling
-	    {% if form.password2.errors %}
-	          {% for error in form.password2.errors %}
-	               {% if error == "This field is required." %}
-	                    errorMessage += "Repeat the password once more.\n"; // Change the default error message
-	                   {% else %}
-	                       errorMessage += "Passwords do not match\n";
-	                {% endif %}
-	       {% endfor%}
-	    {% endif %}
+		// Confirm password field error handling
+		{% if form.password2.errors %}
+		{% for error in form.password2.errors %}
+		{% if error == "This field is required." %}
+		errorMessage += "Repeat the password once more.\n"; // Change the default error message
+		{% else %}
+		errorMessage += "Passwords do not match\n";
+		{% endif %}
+		{% endfor %}
+		{% endif %}
 
-	    // Error handling for all empty fields
-	    {% if form.username.errors and form.password.errors and form.email.errors and form.password2.errors %}
-	        errorMessage = "Make sure you have entered all the fields required to SignUp onto our platform.\n\n";
-	        hasFormErrors = true;  // There are form errors
-	    {% endif %}
+		// Error handling for all empty fields
+		{% if form.username.errors and form.password.errors and form.email.errors and form.password2.errors %}
+		errorMessage = "Make sure you have entered all the fields required to SignUp onto our platform.\n\n";
+		hasFormErrors = true;  // There are form errors
+		{% endif %}
 
 
-	    // If there are any errors, display the error modal
-	    if (hasFormErrors || errorMessage !== "") {
-	        document.getElementById("errorMessage").innerText = errorMessage;
-	        var errorModal = new bootstrap.Modal(document.getElementById('errorModal'), {
-	            keyboard: false
-	        });
-	        errorModal.show();
-	    }
+		// If there are any errors, display the error modal
+		if (hasFormErrors || errorMessage !== "") {
+			document.getElementById("errorMessage").innerText = errorMessage;
+			var errorModal = new bootstrap.Modal(document.getElementById('errorModal'), {
+				keyboard: false
+			});
+			errorModal.show();
+		}
 	});
 </script>
 {% endblock %}

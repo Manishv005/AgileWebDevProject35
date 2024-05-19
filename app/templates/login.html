@@ -20,7 +20,8 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
                         </div>
                         <div class="form-check form-check-inline mb-4 mt-2">
                             {{ form.remember_me(class='form-check-input') }}
-                            <label for="{{ form.remember_me.id }}" class="form-check-label" style="color: #009933">Remember Me</label>
+                            <label for="{{ form.remember_me.id }}" class="form-check-label"
+                                style="color: #009933">Remember Me</label>
                         </div>
                         <div class="d-grid gap-2 mb-3">
                             <button type="submit" class="login-form-button">
@@ -29,11 +30,13 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
                         </div>
                     </form>
                     <p class="text-center mt-3">
-                        If you do not have an account, click on the <span style="color: blueviolet">Sign Up</span> button below.
+                        If you do not have an account, click on the <span style="color: blueviolet">Sign Up</span>
+                        button below.
                     </p>
                     <!-- Sign Up Button -->
                     <div class="d-grid">
-                        <button type="button" class="login-form-button" onclick="window.location.href='{{ url_for('signup') }}';">
+                        <button type="button" class="login-form-button"
+                            onclick="window.location.href='{{ url_for('signup') }}';">
                             Sign Up
                         </button>
                     </div>
@@ -49,9 +52,10 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="errorModalLabel">Login Error</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border: none; border-radius: 10px; padding: 5px 12px; font-size: 14px;">
-					Close
-				</button>				
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    style="border: none; border-radius: 10px; padding: 5px 12px; font-size: 14px;">
+                    Close
+                </button>
             </div>
             <div class="modal-body">
                 <p id="errorMessage"></p>
@@ -61,23 +65,23 @@ extends 'base_inner.html' %} {% endif %} {% block content %}
 </div>
 
 <!-- JavaScript for Showing Error Modals -->
-<script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function() {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
         var errorMessage = "";
         var hasFormErrors = false;  // Flag to detect form errors
 
         // Check for form errors and set a general error message if any are found
         {% if form.username.errors or form.password.errors %}
-            errorMessage = "Please make sure you have entered all the fields required to login.\n";
-            hasFormErrors = true;  // There are form errors
+        errorMessage = "Please make sure you have entered all the fields required to login.\n";
+        hasFormErrors = true;  // There are form errors
         {% endif %}
 
         // Check for flashed messages from the server for invalid username or password
         {% if 'Invalid username' in get_flashed_messages() %}
-            errorMessage += "Please enter the correct username.\n";
+        errorMessage += "Please enter the correct username.\n";
         {% endif %}
         {% if 'Invalid password' in get_flashed_messages() %}
-            errorMessage += "Please enter the correct password.\n";
+        errorMessage += "Please enter the correct password.\n";
         {% endif %}
 
         // If there are any errors, display the error modal
